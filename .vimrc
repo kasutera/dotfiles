@@ -1,6 +1,5 @@
 set nocompatible "vi互換なし
 set autoindent
-set nocompatible
 set breakindent "インデント付き折り返し
 set smarttab
 set showmatch "対応括弧のハイライト
@@ -24,6 +23,9 @@ set undodir=~/.vim_tmp
 set showcmd
 set smartcase "delete keyを昨日
 set backspace=indent,eol,start
+
+set list
+set listchars=tab:>.
 
 syntax enable
 set background=dark
@@ -57,8 +59,6 @@ highlight CursorLine gui=underline guifg=NONE guibg=NONE
 "---------------------------
 " bundleで管理するディレクトリを指定
 set runtimepath+=~/.vim/bundle/neobundle.vim/
-
-" Required:
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 " neobundle自体をneobundleで管理
