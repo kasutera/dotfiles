@@ -21,8 +21,9 @@ set directory=~/.vim_tmp
 set backupdir=~/.vim_tmp
 set undodir=~/.vim_tmp
 set showcmd
-set smartcase "delete keyを昨日
+set smartcase "delete keyを機能
 set backspace=indent,eol,start
+set shellcmdflag=-ic "シェルの外部コマンドがinteractive に
 
 set list
 set listchars=tab:>.
@@ -39,7 +40,7 @@ colorscheme solarized
 "inoremap < <><Left> 
 
 " コマンドモード， <C-m> で make
-noremap <C-m> :! make 
+noremap <C-m> :! mmake 
 
 imap <c-j> <esc>
 
@@ -96,7 +97,7 @@ augroup fileTypeIndent
     autocmd!
     autocmd BufNewFile,BufRead *.asm setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
     autocmd BufNewFile,BufRead *.html setlocal expandtab tabstop=1 softtabstop=1 shiftwidth=1
-    autocmd BufNewFile,BufRead *.tex setlocal noexpandtab tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd BufNewFile,BufRead *.tex setlocal tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
 
 " filetype プラグインによる indent を on にする
