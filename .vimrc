@@ -54,45 +54,6 @@ highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 " アンダーラインを引く(gui)
 highlight CursorLine gui=underline guifg=NONE guibg=NONE
 
-
-"---------------------------
-" Start Neobundle Settings.
-"---------------------------
-" bundleで管理するディレクトリを指定
-set runtimepath+=~/.vim/bundle/neobundle.vim/
-call neobundle#begin(expand('~/.vim/bundle/'))
-
-" neobundle自体をneobundleで管理
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-NeoBundle 'plasticboy/vim-markdown'
-NeoBundle 'tyru/open-browser.vim'
-
-" html
-NeoBundle 'mattn/emmet-vim'
-NeoBundle 'tpope/vim-surround'
-" end html
-
-NeoBundle 'kannokanno/previm'
-augroup PrevimSettings
-    autocmd!
-    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-    let g:previm_open_cmd = 'open -a Safari'
-augroup END
-
-call neobundle#end()
-
-" Required:
-filetype plugin indent on
-
-" 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
-" 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
-NeoBundleCheck
-
-"-------------------------
-" End Neobundle Settings.
-"-------------------------
-
 augroup fileTypeIndent
     autocmd!
     autocmd BufNewFile,BufRead *.asm setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
