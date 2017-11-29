@@ -162,3 +162,5 @@ bindkey '^m' do_enter
 # 名前で色を付けるようにする
 autoload colors
 colors
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
