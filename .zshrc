@@ -88,10 +88,6 @@ alias cdcp='cd $(pbpaste)'
 alias ql='qlmanage -p "$@" >& /dev/null'
 alias history-all='history -E 1'
 alias hist-grep='history-all | grep'
-alias matlab='/Applications/MATLAB_R2017a.app/bin/matlab -nodisplay'
-alias mex='/Applications/MATLAB_R2017a.app/bin/mex'
-alias anki='~/Dropbox/dotfiles/sscript/anki.sh'
-alias amesh='~/Dropbox/dotfiles/sscript/amesh_view/amesh_view.sh'
 alias emacs='vim'
 alias v='vim'
 alias vi='vim'
@@ -100,6 +96,8 @@ alias gcc='clang'
 alias g++='clang++'
 alias date='gdate'
 alias pbtee='tee >(pbcopy)'
+alias pbtee='tee >(pbcopy)'
+alias tig='tig --all'
 
 function transfer.sh() { 
     if [ $# -eq 0 ]; then echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi 
@@ -110,6 +108,14 @@ function transfer.sh() {
 function runc () { g++ $1 && shift && ./a.out $@ }
 function runcpp () { g++ $1 && shift && ./a.out $@ }
 function runawk () { awk -f $@ }
+
+function mmake () {
+    if [ -e "Makefile" ]; then
+        make $@
+    elif [ -e "OMakefile" ]; then
+        omake $@
+    fi
+}
 
 alias -s c=runc
 alias -s cpp=runcpp

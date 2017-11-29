@@ -11,7 +11,6 @@ if has('gui_macvim')
     " 左スクロールバー非表示
 	set guioptions-=l
 	set guioptions-=L
-	set guifont=Osaka-Mono:h14
 
 	" insert modeから抜ける時日本語入力を切る
 	set noimdisableactivate
