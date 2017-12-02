@@ -64,11 +64,36 @@ augroup END
 " filetype プラグインによる indent を on にする
 filetype plugin indent on
 
-"-------------------------
-" Make Settings
-"-------------------------
+" ---------------------------------------------------------------------------------
+"  dein
+" ---------------------------------------------------------------------------------
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 
-"autocmd FileType scala :command Make call s:Make()
+if dein#load_state('~/.vim/dein')
+  call dein#begin('~/.vim/dein')
 
-autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
+  " Let dein manage dein
+  " Required:
+  call dein#add('~/.vim/dein/repos/github.com/Shougo/dein.vim')
 
+  " Add or remove your plugins here:
+
+  " You can specify revision/branch/tag.
+
+  " Required:
+  call dein#end()
+  call dein#save_state()
+endif
+
+" Required:
+filetype plugin indent on
+syntax enable
+
+" If you want to install not installed plugins on startup.
+if dein#check_install()
+  call dein#install()
+endif
+
+" ---------------------------------------------------------------------------------
+"  end dein scripts
+" ---------------------------------------------------------------------------------
