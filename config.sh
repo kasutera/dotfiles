@@ -8,5 +8,9 @@ mkdir -p ~/.vim
 mkdir -p ~/.vim_tmp
 
 # install dein on vim
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-sh ./installer.sh ~/.vim/dein
+if [ ! -e ~/.vim/dein ]; then
+    curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+    sh ./installer.sh ~/.vim/dein
+    rm installer.sh
+fi
+
