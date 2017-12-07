@@ -138,6 +138,10 @@ function peco-history-selection() {
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
+function note() {
+    mkdir -p ~/notes/
+    vim ~/notes/$(date +%Y%m%d).md
+}
 
 function do_enter() {
     if [ -n "$BUFFER" ]; then
