@@ -10,7 +10,9 @@ set shiftwidth=4    " タブを挿入するときの幅
 set expandtab
 set showtabline=2	" タブを常に表示 
 set visualbell t_vb= " ビープ音なし 
-set nobackup
+set noswapfile
+set writebackup
+set backupcopy=no
 set cursorline "カーソル行のハイライト
 set whichwrap=b,s,h,l,<,>,[,]
 set wildmode=list,full "補完設定
