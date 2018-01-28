@@ -6,9 +6,9 @@ mkdir -p ~/.vim_tmp
 
 for filename in .vimrc .vim .gvimrc .zshrc .tigrc
 do
-    ln -sin `pwd`/${filename} ~
+    ln -sf `pwd`/${filename} ~
 done
-ln -sin `pwd`/.vimrc ~/.vim/init.vim
+ln -sf `pwd`/.vimrc ~/.vim/init.vim
 
 # install dein on vim
 if [ ! -e ~/.vim/dein ]; then
