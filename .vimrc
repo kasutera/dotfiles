@@ -16,7 +16,11 @@ set backupcopy=no
 set cursorline "カーソル行のハイライト
 set whichwrap=b,s,h,l,<,>,[,]
 set wildmode=list,full "補完設定
-set clipboard=unnamed,autoselect "クリップボード共有
+if has("nvim")
+    set clipboard+=unnamedplus
+else
+    set clipboard=unnamed,autoselect "クリップボード共有
+endif
 set incsearch "インクリメンタル検索
 set hlsearch "検索結果のハイライト
 set directory=~/.vim_tmp
