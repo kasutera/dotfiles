@@ -34,10 +34,6 @@ set shellcmdflag=-ic "シェルの外部コマンドがinteractive に
 set list
 set listchars=tab:>.
 
-syntax enable
-set background=dark
-colorscheme solarized
-
 " 引用符, 括弧の設定
 "inoremap { {}<Left>
 "inoremap [ []<Left>
@@ -91,7 +87,12 @@ if dein#load_state('~/.vim/dein')
     call dein#begin('~/.vim/dein')
 
     call dein#add('~/.vim/dein/repos/github.com/Shougo/dein.vim')
+
     call dein#add('altercation/vim-colors-solarized')
+
+    syntax enable
+    set background=dark
+    colorscheme solarized
 
     call dein#end()
     call dein#save_state()
@@ -99,12 +100,12 @@ endif
 
 " Required:
 filetype plugin indent on
-syntax enable
 
 " If you want to install not installed plugins on startup.
 if dein#check_install()
     call dein#install()
 endif
+
 
 " ---------------------------------------------------------------------------------
 "  end dein scripts
