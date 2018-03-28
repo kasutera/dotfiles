@@ -98,6 +98,7 @@ alias g++='clang++'
 type gdate >> /dev/null && alias date='gdate'
 alias pbtee='tee >(pbcopy)'
 alias tig='tig --all'
+alias :q='exit'
 
 transfer() { 
     # check arguments
@@ -183,6 +184,22 @@ bindkey '^R' peco-history-selection
 function note() {
     mkdir -p ~/notes/
     vim ~/notes/$(date +%Y%m%d).md
+}
+
+function note-all() {
+    { \
+        for file in $(\
+            echo ~/notes/*.md \
+            | tr ' ' '\n' \
+            | awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }'\
+            ) ; do
+            echo
+            echo ========
+            echo $file | grep -o '[0-9]\{8,8\}'
+            echo ========
+            cat $file
+        done
+    } | less --ignore-case
 }
 
 function do_enter() {
