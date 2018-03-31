@@ -227,3 +227,6 @@ autoload colors
 colors
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# 追加ファイルがあるならインポート
+test -e "${HOME}/.zsh_extrc" && source "${HOME}/.zsh_extrc"
