@@ -11,10 +11,3 @@ do
 done
 ln -sf `pwd`/.vimrc ~/.config/nvim/init.vim
 
-# install dein on vim
-if [ ! -e ~/.vim/dein ]; then
-    curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-    sh ./installer.sh ~/.vim/dein
-    rm installer.sh
-fi
-
