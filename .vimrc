@@ -81,22 +81,40 @@ endfunction
 " ---------------------------------------------------------------------------------
 "  dein
 " ---------------------------------------------------------------------------------
-set runtimepath^=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+" dein.vimインストール時に指定したディレクトリをセット
+let s:dein_dir = expand('~/.vim/dein')
+
+" dein.vimの実体があるディレクトリをセット
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+
+" dein.vimが存在していない場合はgithubからclone
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+endif
 
 if dein#load_state('~/.vim/dein')
     call dein#begin('~/.vim/dein')
 
-    call dein#add('~/.vim/dein/repos/github.com/Shougo/dein.vim')
+    " dein.toml, dein_layz.tomlファイルのディレクトリをセット
+    let s:toml_dir = expand('~/.config/nvim')
 
-    call dein#add('altercation/vim-colors-solarized')
+    " 起動時に読み込むプラグイン群
+    call dein#load_toml(s:toml_dir . '/dein.toml', {'lazy': 0})
 
-    syntax enable
-    set background=dark
-    colorscheme solarized
+    " 遅延読み込みしたいプラグイン群
+    call dein#load_toml(s:toml_dir . '/dein_lazy.toml', {'lazy': 1})
 
     call dein#end()
     call dein#save_state()
 endif
+
+syntax enable
+set background=dark
+colorscheme solarized
 
 " Required:
 filetype plugin indent on
