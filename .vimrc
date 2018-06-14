@@ -56,6 +56,18 @@ highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 " アンダーラインを引く(gui)
 highlight CursorLine gui=underline guifg=NONE guibg=NONE
 
+" Spell check
+nnoremap t :call SpellToggle()<CR>
+function! SpellToggle()
+    " setlocal spell!
+    setlocal spell! spelllang=en,cjk
+    if exists("g:syntax_on")
+        syntax off
+    else
+        syntax on
+    endif
+endfunction
+
 augroup fileTypeIndent
     autocmd!
     autocmd BufNewFile,BufRead *.asm setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
