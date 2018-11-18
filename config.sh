@@ -5,7 +5,7 @@ mkdir -p ~/.vim
 mkdir -p ~/.vim_tmp
 mkdir -p ~/.config/nvim
 
-for filename in .vimrc .gvimrc .zshrc .tigrc
+for filename in .vimrc .gvimrc .zshrc .tigrc .bashrc
 do
     ln -sf `pwd`/${filename} ~
 done
