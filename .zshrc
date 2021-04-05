@@ -6,10 +6,11 @@ export HISTSIZE=100000                   # メモリ内の履歴の数
 export SAVEHIST=100000                   # 保存される履歴の数
 setopt extended_history                  # 履歴ファイルに時刻を記録
 setopt hist_ignore_dups                  # 重複を記録しない
+setopt hist_ignore_space                 # スペースで始まるコマンド行はヒストリリストから削除
 # setopt inc_append_history              # 端末間でヒストリを共有
 # setopt share_history
 
-export PATH=$PATH:~/bin
+export PATH=~/bin:$PATH
 
 # vim keybind
 bindkey -v
@@ -182,9 +183,13 @@ alias -s awk=runawk
 autoload zmv
 alias zmv='noglob zmv -W'
 
+reverse() {
+    awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }'
+}
+
 # peco (コマンド検索)
 function peco-history-selection() {
-    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+    BUFFER=$(history -n 1 | reverse | awk '!a[$0]++' | peco)
     CURSOR=$#BUFFER
     zle reset-prompt
 }
