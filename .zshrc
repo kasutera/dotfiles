@@ -7,13 +7,17 @@ export SAVEHIST=100000                   # 保存される履歴の数
 setopt extended_history                  # 履歴ファイルに時刻を記録
 setopt hist_ignore_dups                  # 重複を記録しない
 setopt hist_ignore_space                 # スペースで始まるコマンド行はヒストリリストから削除
-# setopt inc_append_history              # 端末間でヒストリを共有
+setopt inc_append_history_time           # 端末間でヒストリを共有
 # setopt share_history
 
 export PATH=~/bin:$PATH
 
 # vim keybind
 bindkey -v
+
+# braking line by ^J on command line
+bindkey '^J' self-insert
+
 # esc lag
 KEYTIMEOUT=1
 
