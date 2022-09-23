@@ -1,0 +1,14 @@
+[include]
+    path = ~/.gitconfig.local
+[core]
+    editor = vim
+[push]
+    default = simple
+[merge]
+    ff = false
+[pull]
+    ff = only
+[alias]
+    web = !git-remote-web
+[diff]
+    algoritm = histogram
