@@ -249,7 +249,12 @@ bindkey '^m' do_enter
 autoload colors
 colors
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+test -e "${HOME}/.iterm2_shell_integration.zsh" \
+    && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # 追加ファイルがあるならインポート
-test -e "${HOME}/.zsh_extrc" && source "${HOME}/.zsh_extrc"
+test -e "${HOME}/.zsh_extrc" \
+    && source "${HOME}/.zsh_extrc"
+
+test -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" &&
+    source "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
