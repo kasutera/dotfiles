@@ -29,6 +29,7 @@ set showcmd
 set smartcase                           "delete keyを機能
 set backspace=indent,eol,start
 set shellcmdflag=-ic                    "シェルの外部コマンドがinteractive に
+:set splitright                         "vspで右に
 
 set list
 set listchars=tab:>.
