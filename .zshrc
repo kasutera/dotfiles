@@ -31,6 +31,9 @@ export LANG=ja_JP.UTF-8
 # ベルを鳴らさない。
 setopt no_beep
 
+# less display prompt (-M), ANSI escape sequence (-R)
+export LESS='-M -R'
+
 #export PATH=/opt/local/bin:$PATH
 
 function pbf () {
