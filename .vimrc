@@ -1,35 +1,34 @@
-set nocompatible "vi互換なし
 set autoindent
-set breakindent "インデント付き折り返し
+set breakindent                         "インデント付き折り返し
 set smarttab
-set showmatch "対応括弧のハイライト
+set showmatch                           "対応括弧のハイライト
 set relativenumber
 set number
-set tabstop=4        " タブを表示するときの幅
-set shiftwidth=4    " タブを挿入するときの幅
+set tabstop=4                           " タブを表示するときの幅
+set shiftwidth=4                        " タブを挿入するときの幅
 set expandtab
-set showtabline=2	" タブを常に表示 
-set visualbell t_vb= " ビープ音なし 
+set showtabline=2                       " タブを常に表示 
+set visualbell t_vb=                    " ビープ音なし 
 set noswapfile
 set writebackup
 set backupcopy=no
-set cursorline "カーソル行のハイライト
+set cursorline                          "カーソル行のハイライト
 set whichwrap=b,s,h,l,<,>,[,]
-set wildmode=list,full "補完設定
+set wildmode=list,full                  "補完設定
 if has("nvim")
     set clipboard+=unnamedplus
 else
-    set clipboard=unnamed,autoselect "クリップボード共有
+    set clipboard=unnamed,autoselect    "クリップボード共有
 endif
-set incsearch "インクリメンタル検索
-set hlsearch "検索結果のハイライト
+set incsearch                           "インクリメンタル検索
+set hlsearch                            "検索結果のハイライト
 set directory=~/.vim_tmp
 set backupdir=~/.vim_tmp
 set undodir=~/.vim_tmp
 set showcmd
-set smartcase "delete keyを機能
+set smartcase                           "delete keyを機能
 set backspace=indent,eol,start
-set shellcmdflag=-ic "シェルの外部コマンドがinteractive に
+set shellcmdflag=-ic                    "シェルの外部コマンドがinteractive に
 
 set list
 set listchars=tab:>.
