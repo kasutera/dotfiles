@@ -7,8 +7,8 @@ set number
 set tabstop=4                           " タブを表示するときの幅
 set shiftwidth=4                        " タブを挿入するときの幅
 set expandtab
-set showtabline=2                       " タブを常に表示 
-set visualbell t_vb=                    " ビープ音なし 
+set showtabline=2                       " タブを常に表示
+set visualbell t_vb=                    " ビープ音なし
 set noswapfile
 set writebackup
 set backupcopy=no
@@ -38,7 +38,7 @@ set listchars=tab:>.
 "inoremap [ []<Left>
 "inoremap ( ()<Left>
 "inoremap ' ''<Left>
-"inoremap < <><Left> 
+"inoremap < <><Left>
 
 imap <c-j> <esc>
 
