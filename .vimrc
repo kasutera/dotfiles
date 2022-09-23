@@ -129,3 +129,7 @@ augroup END
 if has('nvim')
     cnoremap 3636 <c-u>undo<CR>
 endif
+
+if filereadable(expand('$HOME/.vimrc_ext'))
+    source $HOME/.vimrc_ext
+endif
