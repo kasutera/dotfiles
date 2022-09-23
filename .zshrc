@@ -38,7 +38,7 @@ function pbf () {
 }
 
 function md2pdf(){
-  pandoc $1.md -o $2.pdf -V documentclass=ltjsarticle --latex-engine=lualatex
+  pandoc $1.md -o $2.pdf -V documentclass=ltjsarticle --pdf-engine=lualatex
 }
 
 csvless(){
