@@ -1,20 +1,43 @@
-#!/bin/sh
-cd `dirname $0`
+#!/usr/bin/env bash
+set -e
 
-mkdir -p ~/.vim
-mkdir -p ~/.vim_tmp
-mkdir -p ~/.config/nvim
-
-for filename in .vimrc .vim .gvimrc .zshrc .tigrc
-do
-    ln -sf `pwd`/${filename} ~
-done
-ln -sf `pwd`/.vimrc ~/.config/nvim/init.vim
-
-# install dein on vim
-if [ ! -e ~/.vim/dein ]; then
-    curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-    sh ./installer.sh ~/.vim/dein
-    rm installer.sh
+if [[ "$0" != ./config.sh ]]; then
+    echo "ERROR: Please run this with ./config.sh" >&2
+    exit 1
 fi
 
+if [[ "${PWD}" != "${HOME}/dotfiles" ]]; then
+    echo "ERROR: Please clone this in your \${HOME} directory" >&2
+    exit 1
+fi
+
+if ! type git > /dev/null; then
+    echo "ERROR: Please install git first" >&2
+    exit 1
+fi
+
+git submodule init
+git submodule update
+
+mkdir -p ~/.vim/
+mkdir -p ~/.vim_tmp/
+mkdir -p ~/.config/nvim/
+mkdir -p ~/.config/git/
+
+for filename in \
+    .vimrc \
+    .gvimrc \
+    .zshrc \
+    .tigrc \
+    .bashrc \
+    .config/git/config
+do
+    ln -sf "${PWD}/${filename}" "${HOME}/${filename}"
+done
+
+ln -sf "${PWD}/.vimrc" ~/.config/nvim/init.vim
+
+# copy gitconfig's init setting
+if [[ ! -e "${HOME}"/.gitconfig.local ]]; then
+    cp .gitconfig.local "${HOME}/.gitconfig.local"
+fi
