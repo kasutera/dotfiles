@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+VIMRC_EXT=~/.vimrc_ext
+
 if [[ "$0" != ./config.sh ]]; then
     echo "ERROR: Please run this with ./config.sh" >&2
     exit 1
@@ -37,6 +39,8 @@ done
 
 ln -sf "${PWD}/.vimrc" ~/.config/nvim/init.vim
 
+touch "${VIMRC_EXT}"
+
 # copy gitconfig's init setting
 if [[ ! -e "${HOME}"/.gitconfig.local ]]; then
     cp .gitconfig.local "${HOME}/.gitconfig.local"
@@ -60,4 +64,21 @@ case "${yn}" in
         ;;
     *)
         echo "Not installed"
+esac
+
+read -p "Is this remote? (vim colorscheme setting) [y/n]: " yn
+case "${yn}" in
+    [yY])
+        if ! grep -q "set background" "${VIMRC_EXT}"; then
+            cat <<-EOF >> "${VIMRC_EXT}"
+
+set background=light
+EOF
+        fi
+        ;;
+    [nN])
+        ;;
+    *)
+        echo "abort"
+        exit 1
 esac
