@@ -52,6 +52,25 @@ highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 " アンダーラインを引く(gui)
 highlight CursorLine gui=underline guifg=NONE guibg=NONE
 
+call plug#begin('~/.vim/plugged')
+
+Plug 'altercation/vim-colors-solarized'
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-surround'
+
+"Pythonmode
+Plug 'davidhalter/jedi-vim'
+Plug 'klen/python-mode'
+Plug 'nvie/vim-flake8'
+Plug 'hynek/vim-python-pep8-indent'
+
+" follow symlink
+Plug 'aymericbeaumet/vim-symlink'
+Plug 'moll/vim-bbye' " optional dependency
+
+call plug#end()
+
 " Spell check
 nnoremap t :call SpellToggle()<CR>
 function! SpellToggle()
@@ -74,21 +93,25 @@ augroup END
 " filetype プラグインによる indent を on にする
 filetype plugin indent on
 
-" symbolic link edit
-command! FollowSymlink call s:SwitchToActualFile()
-function! s:SwitchToActualFile()
-    let l:fname = resolve(expand('%:p'))
-    let l:pos = getpos('.')
-    let l:bufname = bufname('%')
-    enew
-    exec 'bw '. l:bufname
-    exec "e" . fname
-    call setpos('.', pos)
-endfunction
+"" symbolic link edit
+"command! FollowSymlink call s:SwitchToActualFile()
+"function! s:SwitchToActualFile()
+"    let l:fname = resolve(expand('%:p'))
+"    let l:pos = getpos('.')
+"    let l:bufname = bufname('%')
+"    enew
+"    exec 'bw '. l:bufname
+"    exec "e" . fname
+"    call setpos('.', pos)
+"endfunction
 
 syntax enable
 set background=dark
-colorscheme solarized
+
+try
+    colorscheme solarized
+catch
+endtry
 
 " ファイル保存時にディレクトリがなかったら作成するか問う
 augroup vimrc-auto-mkdir
