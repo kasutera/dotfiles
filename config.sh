@@ -1,5 +1,5 @@
 #!/bin/sh
-cd `dirname $0`
+cd $(dirname $0)
 
 mkdir -p ~/.vim
 mkdir -p ~/.vim_tmp
@@ -7,7 +7,7 @@ mkdir -p ~/.config/nvim
 
 for filename in .vimrc .gvimrc .zshrc .tigrc .bashrc
 do
-    ln -sf `pwd`/${filename} ~
+    ln -sf ${PWD}/${filename} ~
 done
-ln -sf `pwd`/.vimrc ~/.config/nvim/init.vim
+ln -sf ${PWD}/.vimrc ~/.config/nvim/init.vim
 
