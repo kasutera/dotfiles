@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ "$0" == ./* ]]; then
-    cd $(dirname $0)
-else
+if [[ "$0" != ./config.sh ]]; then
     echo "ERROR: Please run this with ./config.sh" >&2
     exit 1
 fi
