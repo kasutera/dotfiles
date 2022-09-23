@@ -40,9 +40,6 @@ set listchars=tab:>.
 "inoremap ' ''<Left>
 "inoremap < <><Left> 
 
-" コマンドモード， <C-m> で make
-noremap <C-m> :! mmake 
-
 imap <c-j> <esc>
 
 " アルファベットのインクリメント
