@@ -10,5 +10,6 @@
     ff = only
 [alias]
     web = !git-remote-web
+    com = commit -v
 [diff]
     algoritm = histogram
