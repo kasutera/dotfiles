@@ -6,18 +6,12 @@ if [[ "$0" != ./install_solarized_vim.sh ]]; then
     exit 1
 fi
 
-TEMP_DIR=tmp
-mkdir "${TEMP_DIR}"
+git submodule update --init
+pushd vim-colors-solarized/colors > /dev/null
 
-pushd "${TEMP_DIR}"
-git clone https://github.com/altercation/vim-colors-solarized.git
-
-pushd vim-colors-solarized/colors
 mkdir -p ~/.vim/colors
 cp solarized.vim ~/.vim/colors
 mkdir -p ~/.config/nvim/colors
 cp solarized.vim ~/.config/nvim/colors
-popd
 
-popd
-rm -Rf "${TEMP_DIR}"
+popd > /dev/null
