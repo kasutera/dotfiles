@@ -55,7 +55,7 @@ esac
 read -p "Install iterm2_shell_integration? [Y/n]: " yn
 case "${yn}" in
     [yY])
-        ./install_plug.vim.sh
+        ./install_iterm2_shell_integration.sh
         echo "Installed"
         ;;
     *)
