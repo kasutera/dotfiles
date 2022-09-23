@@ -93,3 +93,8 @@ endfunction
 syntax enable
 set background=dark
 colorscheme solarized
+
+" 起動時に変な文字が入る問題
+if has('nvim')
+    cnoremap 3636 <c-u>undo<CR>
+endif
