@@ -1,35 +1,34 @@
-set nocompatible "vi互換なし
 set autoindent
-set breakindent "インデント付き折り返し
+set breakindent                         "インデント付き折り返し
 set smarttab
-set showmatch "対応括弧のハイライト
+set showmatch                           "対応括弧のハイライト
 set relativenumber
 set number
-set tabstop=4        " タブを表示するときの幅
-set shiftwidth=4    " タブを挿入するときの幅
+set tabstop=4                           " タブを表示するときの幅
+set shiftwidth=4                        " タブを挿入するときの幅
 set expandtab
-set showtabline=2	" タブを常に表示 
-set visualbell t_vb= " ビープ音なし 
+set showtabline=2                       " タブを常に表示 
+set visualbell t_vb=                    " ビープ音なし 
 set noswapfile
 set writebackup
 set backupcopy=no
-set cursorline "カーソル行のハイライト
+set cursorline                          "カーソル行のハイライト
 set whichwrap=b,s,h,l,<,>,[,]
-set wildmode=list,full "補完設定
+set wildmode=list,full                  "補完設定
 if has("nvim")
     set clipboard+=unnamedplus
 else
-    set clipboard=unnamed,autoselect "クリップボード共有
+    set clipboard=unnamed,autoselect    "クリップボード共有
 endif
-set incsearch "インクリメンタル検索
-set hlsearch "検索結果のハイライト
+set incsearch                           "インクリメンタル検索
+set hlsearch                            "検索結果のハイライト
 set directory=~/.vim_tmp
 set backupdir=~/.vim_tmp
 set undodir=~/.vim_tmp
 set showcmd
-set smartcase "delete keyを機能
+set smartcase                           "delete keyを機能
 set backspace=indent,eol,start
-set shellcmdflag=-ic "シェルの外部コマンドがinteractive に
+set shellcmdflag=-ic                    "シェルの外部コマンドがinteractive に
 
 set list
 set listchars=tab:>.
@@ -40,9 +39,6 @@ set listchars=tab:>.
 "inoremap ( ()<Left>
 "inoremap ' ''<Left>
 "inoremap < <><Left> 
-
-" コマンドモード， <C-m> で make
-noremap <C-m> :! mmake 
 
 imap <c-j> <esc>
 
@@ -55,6 +51,18 @@ set cursorline
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 " アンダーラインを引く(gui)
 highlight CursorLine gui=underline guifg=NONE guibg=NONE
+
+" Spell check
+nnoremap t :call SpellToggle()<CR>
+function! SpellToggle()
+    " setlocal spell!
+    setlocal spell! spelllang=en,cjk
+    if exists("g:syntax_on")
+        syntax off
+    else
+        syntax on
+    endif
+endfunction
 
 augroup fileTypeIndent
     autocmd!
@@ -78,53 +86,23 @@ function! s:SwitchToActualFile()
     call setpos('.', pos)
 endfunction
 
-" ---------------------------------------------------------------------------------
-"  dein
-" ---------------------------------------------------------------------------------
-
-" dein.vimインストール時に指定したディレクトリをセット
-let s:dein_dir = expand('~/.vim/dein')
-
-" dein.vimの実体があるディレクトリをセット
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-
-" dein.vimが存在していない場合はgithubからclone
-if &runtimepath !~# '/dein.vim'
-  if !isdirectory(s:dein_repo_dir)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-  endif
-  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
-endif
-
-if dein#load_state('~/.vim/dein')
-    call dein#begin('~/.vim/dein')
-
-    " dein.toml, dein_layz.tomlファイルのディレクトリをセット
-    let s:toml_dir = expand('~/.config/nvim')
-
-    " 起動時に読み込むプラグイン群
-    call dein#load_toml(s:toml_dir . '/dein.toml', {'lazy': 0})
-
-    " 遅延読み込みしたいプラグイン群
-    call dein#load_toml(s:toml_dir . '/dein_lazy.toml', {'lazy': 1})
-
-    call dein#end()
-    call dein#save_state()
-endif
-
 syntax enable
 set background=dark
 colorscheme solarized
 
-" Required:
-filetype plugin indent on
+" ファイル保存時にディレクトリがなかったら作成するか問う
+augroup vimrc-auto-mkdir
+    autocmd!
+    autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 
-" If you want to install not installed plugins on startup.
-if dein#check_install()
-    call dein#install()
+    function! s:auto_mkdir(dir, force)
+        if !isdirectory(a:dir) && (a:force || input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+            call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+        endif
+    endfunction
+augroup END
+
+" 起動時に変な文字が入る問題
+if has('nvim')
+    cnoremap 3636 <c-u>undo<CR>
 endif
-
-
-" ---------------------------------------------------------------------------------
-"  end dein scripts
-" ---------------------------------------------------------------------------------

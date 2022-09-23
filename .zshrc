@@ -6,13 +6,18 @@ export HISTSIZE=100000                   # メモリ内の履歴の数
 export SAVEHIST=100000                   # 保存される履歴の数
 setopt extended_history                  # 履歴ファイルに時刻を記録
 setopt hist_ignore_dups                  # 重複を記録しない
-# setopt inc_append_history              # 端末間でヒストリを共有
+setopt hist_ignore_space                 # スペースで始まるコマンド行はヒストリリストから削除
+setopt inc_append_history_time           # 端末間でヒストリを共有
 # setopt share_history
 
-export PATH=$PATH:~/bin
+export PATH=~/bin:$PATH
 
 # vim keybind
 bindkey -v
+
+# braking line by ^J on command line
+bindkey '^J' self-insert
+
 # esc lag
 KEYTIMEOUT=1
 
@@ -26,6 +31,9 @@ export LANG=ja_JP.UTF-8
 # ベルを鳴らさない。
 setopt no_beep
 
+# less display prompt (-M), ANSI escape sequence (-R)
+export LESS='-M -R'
+
 #export PATH=/opt/local/bin:$PATH
 
 function pbf () {
@@ -33,7 +41,15 @@ function pbf () {
 }
 
 function md2pdf(){
-  pandoc $1.md -o $2.pdf -V documentclass=ltjsarticle --latex-engine=lualatex
+  pandoc $1.md -o $2.pdf -V documentclass=ltjsarticle --pdf-engine=lualatex
+}
+
+csvless(){
+    if [[ $# -eq 0 ]]; then
+        column -s, -t | less -#2 -N -S
+    else
+        column -s, -t < $1 | less -#2 -N -S
+    fi
 }
 
 # ############################################################# #
@@ -74,7 +90,10 @@ zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
 zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
 zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
-precmd () { vcs_info }
+precmd () {
+    vcs_info
+    echo -ne "\e]1;$(basename $PWD)\a"
+}
 
 # ############################################################# #
 # alias                                                         #
@@ -171,9 +190,13 @@ alias -s awk=runawk
 autoload zmv
 alias zmv='noglob zmv -W'
 
+reverse() {
+    awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }'
+}
+
 # peco (コマンド検索)
 function peco-history-selection() {
-    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+    BUFFER=$(history -n 1 | reverse | awk '!a[$0]++' | peco)
     CURSOR=$#BUFFER
     zle reset-prompt
 }
@@ -226,4 +249,12 @@ bindkey '^m' do_enter
 autoload colors
 colors
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+test -e "${HOME}/.iterm2_shell_integration.zsh" \
+    && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# 追加ファイルがあるならインポート
+test -e "${HOME}/.zsh_extrc" \
+    && source "${HOME}/.zsh_extrc"
+
+test -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" &&
+    source "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
