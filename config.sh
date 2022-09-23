@@ -6,6 +6,19 @@ if [[ "$0" != ./config.sh ]]; then
     exit 1
 fi
 
+if [[ "${PWD}" != "${HOME}/dotfiles" ]]; then
+    echo "ERROR: Please clone this in your \${HOME} directory" >&2
+    exit 1
+fi
+
+if ! type git > /dev/null; then
+    echo "ERROR: Please install git first" >&2
+    exit 1
+fi
+
+git submodule init
+git submodule update
+
 mkdir -p ~/.vim/
 mkdir -p ~/.vim_tmp/
 mkdir -p ~/.config/nvim/
