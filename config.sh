@@ -12,7 +12,6 @@ mkdir -p ~/.vim/
 mkdir -p ~/.vim_tmp/
 mkdir -p ~/.config/nvim/
 mkdir -p ~/.config/git/
-touch ~/.gitconfig.local
 
 for filename in \
     .vimrc \
@@ -22,8 +21,12 @@ for filename in \
     .bashrc \
     .config/git/config
 do
-    ln -sf "${PWD}/${filename}" ${HOME}/${filename}
+    ln -sf "${PWD}/${filename}" "${HOME}/${filename}"
 done
 
 ln -sf "${PWD}/.vimrc" ~/.config/nvim/init.vim
 
+# copy gitconfig's init setting
+if [[ ! -e "${HOME}"/.gitconfig.local ]]; then
+    cp .gitconfig.local "${HOME}/.gitconfig.local"
+fi
