@@ -94,18 +94,6 @@ augroup END
 " filetype プラグインによる indent を on にする
 filetype plugin indent on
 
-"" symbolic link edit
-"command! FollowSymlink call s:SwitchToActualFile()
-"function! s:SwitchToActualFile()
-"    let l:fname = resolve(expand('%:p'))
-"    let l:pos = getpos('.')
-"    let l:bufname = bufname('%')
-"    enew
-"    exec 'bw '. l:bufname
-"    exec "e" . fname
-"    call setpos('.', pos)
-"endfunction
-
 syntax enable
 set background=dark
 
