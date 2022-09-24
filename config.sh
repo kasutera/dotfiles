@@ -46,7 +46,7 @@ if [[ ! -e "${HOME}"/.gitconfig.local ]]; then
     cp .gitconfig.local "${HOME}/.gitconfig.local"
 fi
 
-read -p "Install plug.vim? [Y/n]: " yn
+read -p "Install plug.vim? [y/N]: " yn
 case "${yn}" in
     [yY])
         ./install_plug.vim.sh
@@ -56,7 +56,7 @@ case "${yn}" in
         echo "Not installed"
 esac
 
-read -p "Install iterm2_shell_integration? [Y/n]: " yn
+read -p "Install iterm2_shell_integration? [y/N]: " yn
 case "${yn}" in
     [yY])
         ./install_iterm2_shell_integration.sh
