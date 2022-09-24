@@ -59,8 +59,10 @@ csvless(){
 setopt autocd                            # cdつけなくてもcd
 setopt auto_pushd                        # 過去のディレクトリ
 setopt correct                           # 訂正
-fpath=(/usr/local/share/zsh-completions $fpath)
-autoload -U compinit ; compinit          # オプションを補完 
+if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
+autoload -U compinit ; compinit          # オプションを補完
 bindkey "^[[Z" reverse-menu-complete     # Shift-Tabで補完候補を逆順する
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 setopt nonomatch                         # *による補完
