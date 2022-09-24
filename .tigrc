@@ -18,3 +18,12 @@ bind main    G      move-last-line
 
 # Alt-g で :toggle commit-title-graph
 bind main    <Esc>g :toggle commit-title-graph
+
+# どこでもCでcommit
+bind generic C      !git commit -v
+bind refs    C      !git commit -v
+bind main    C      !git commit -v
+
+# K で cherry-pick (default: 'C')
+bind main    K      ?git cherry-pick %(commit)
+bind diff    K      ?git cherry-pick %(commit)
