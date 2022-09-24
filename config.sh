@@ -34,6 +34,17 @@ for filename in \
     .bashrc \
     .config/git/config
 do
+    if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/${filename}" "${HOME}/${filename}"; then
+        read -p "Overwrite ${HOME}/${filename} ? [y/N]: " yn
+        case "${yn}" in
+            [yY])
+                echo "ok"
+                ;;
+            *)
+                echo "continue"
+                continue
+        esac
+    fi
     ln -sf "${PWD}/${filename}" "${HOME}/${filename}"
 done
 
