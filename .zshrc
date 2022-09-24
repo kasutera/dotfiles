@@ -121,32 +121,28 @@ alias pbtee='tee >(pbcopy)'
 alias tig='tig --all'
 alias :q='exit'
 
-transfer() { 
+transfer() {
     # check arguments
-    if [ $# -eq 0 ]; 
-    then 
+    if [ $# -eq 0 ]; then
         echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
         return 1
     fi
 
     # get temporarily filename, output is written to this file show progress can be showed
     tmpfile=$( mktemp -t transferXXX )
-    
+
     # upload stdin or file
     file=$1
 
-    if tty -s; 
-    then 
-        basefile=$(basename "$file" | sed -e 's/[^a-zA-Z0-9._-]/-/g') 
+    if tty -s; then
+        basefile=$(basename "$file" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
 
-        if [ ! -e $file ];
-        then
+        if [ ! -e $file ]; then
             echo "File $file doesn't exists."
             return 1
         fi
-        
-        if [ -d $file ];
-        then
+
+        if [ -d $file ]; then
             # zip directory and transfer
             zipfile=$( mktemp -t transferXXX.zip )
             cd $(dirname $file) && zip -r -q - $(basename $file) >> $zipfile
@@ -156,11 +152,11 @@ transfer() {
             # transfer file
             curl --progress-bar --upload-file "$file" "https://transfer.sh/$basefile" >> $tmpfile
         fi
-    else 
+    else
         # transfer pipe
         curl --progress-bar --upload-file "-" "https://transfer.sh/$file" >> $tmpfile
     fi
-   
+
     # cat output link
     cat $tmpfile
 
@@ -258,6 +254,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" \
 test -e "${HOME}/.zsh_extrc" \
     && source "${HOME}/.zsh_extrc"
 
+# zsh-syntax-highlighting must be end of .zshrc
 if [[ -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
     ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
     source "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
