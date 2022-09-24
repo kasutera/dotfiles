@@ -15,6 +15,24 @@ export PATH=~/bin:$PATH
 # vim keybind
 bindkey -v
 
+# enable da(
+autoload -U select-bracketed
+zle -N select-bracketed
+for m in visual viopp; do
+  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    bindkey -M $m $c select-bracketed
+  done
+done
+
+# enable da"
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+  for c in {a,i}{\',\",\`}; do
+    bindkey -M $m $c select-quoted
+  done
+done
+
 # braking line by ^J on command line
 bindkey '^J' self-insert
 
