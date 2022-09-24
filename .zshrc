@@ -250,6 +250,12 @@ colors
 test -e "${HOME}/.iterm2_shell_integration.zsh" \
     && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# cd-gitroot
+if [[ -e "${HOME}"/dotfiles/cd-gitroot ]]; then
+    fpath=("${HOME}"/dotfiles/cd-gitroot $fpath)
+    autoload -Uz cd-gitroot
+fi
+
 # 追加ファイルがあるならインポート
 test -e "${HOME}/.zsh_extrc" \
     && source "${HOME}/.zsh_extrc"
