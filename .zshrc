@@ -54,6 +54,9 @@ export LESS='-M -R'
 
 #export PATH=/opt/local/bin:$PATH
 
+# bat theme
+export BAT_THEME='Solarized (dark)'
+
 function pbf () {
     echo ${@:1:($#)}
 }
