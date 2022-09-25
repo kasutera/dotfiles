@@ -56,6 +56,8 @@ export LESS='-M -R'
 
 # bat theme
 export BAT_THEME='Solarized (dark)'
+type batcat >> /dev/null && alias bat=batcat
+
 
 function pbf () {
     echo ${@:1:($#)}
