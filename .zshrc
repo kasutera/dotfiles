@@ -79,12 +79,14 @@ csvless(){
 # completion                                                    #
 # ############################################################# #
 
+if type brew &>/dev/null; then
+    BREW_PREFIX="$(brew --prefix)"
+    FPATH="${BREW_PREFIX}/share/zsh-completions:$FPATH"
+    FPATH="${BREW_PREFIX}/share/zsh/site-functions:$FPATH"
+fi
 setopt autocd                            # cdつけなくてもcd
 setopt auto_pushd                        # 過去のディレクトリ
 setopt correct                           # 訂正
-if type brew &>/dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-fi
 autoload -U compinit ; compinit          # オプションを補完
 bindkey "^[[Z" reverse-menu-complete     # Shift-Tabで補完候補を逆順する
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
