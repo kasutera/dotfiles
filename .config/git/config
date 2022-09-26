@@ -11,5 +11,7 @@
 [alias]
     web = !git-remote-web
     com = commit -v
+[commit]
+    verbose = true
 [diff]
     algoritm = histogram
