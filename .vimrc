@@ -59,6 +59,8 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
+" auto parentheses
+Plug 'cohama/lexima.vim'
 
 "Pythonmode
 Plug 'davidhalter/jedi-vim'
