@@ -1,5 +1,5 @@
 [core]
-    editor = vim
+    editor = "if type nvim > /dev/null; then ED='nvim'; else ED='vim'; fi; $ED"
 [push]
     default = simple
 [merge]
