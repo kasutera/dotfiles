@@ -49,8 +49,8 @@ export LANG=ja_JP.UTF-8
 # ベルを鳴らさない。
 setopt no_beep
 
-# less display prompt (-M), ANSI escape sequence (-R)
-export LESS='-M -R'
+# less display prompt (-M), ANSI escape sequence (-R), not to pagenate if less than a page (-F), keep output (-X)
+export LESS='-M -R -F -X'
 
 #export PATH=/opt/local/bin:$PATH
 
