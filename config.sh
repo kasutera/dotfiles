@@ -32,6 +32,7 @@ for filename in \
     .zshrc \
     .tigrc \
     .bashrc \
+    .inputrc \
     .config/git/config
 do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/${filename}" "${HOME}/${filename}"; then
