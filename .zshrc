@@ -1,9 +1,9 @@
 # ############################################################# #
 # history                                                       #
 # ############################################################# #
-export HISTFILE="$HOME/.zsh_history"     # 履歴をファイルに保存する
-export HISTSIZE=100000                   # メモリ内の履歴の数
-export SAVEHIST=100000                   # 保存される履歴の数
+HISTFILE="$HOME/.zsh_history"            # 履歴をファイルに保存する
+HISTSIZE=100000                          # メモリ内の履歴の数
+SAVEHIST=100000                          # 保存される履歴の数
 setopt extended_history                  # 履歴ファイルに時刻を記録
 setopt hist_ignore_dups                  # 重複を記録しない
 setopt hist_ignore_space                 # スペースで始まるコマンド行はヒストリリストから削除
@@ -102,9 +102,26 @@ PROMPT="%F{green}[%n@%m %~]%f "'${vcs_info_msg_0_}'"
 SPROMPT="%R -> %r ? [Yes/No/Abort/Edit]"
 
 function zle-line-init zle-keymap-select {
-    RPS1="${${KEYMAP/vicmd/-- NORMAL -- }/(main|viins)/-- INSERT -- }"
-    RPS2=$RPS1
+    if [[ ${KEYMAP} == vicmd ]] ||
+        [[ $1 = 'block' ]]; then
+        # block shape
+        echo -ne '\e[2 q'
+
+    elif [[ ${KEYMAP} == main ]] ||
+        [[ ${KEYMAP} == viins ]] ||
+        [[ ${KEYMAP} = '' ]] ||
+        [[ $1 = 'beam' ]]; then
+        # beam shape
+        echo -ne '\e[6 q'
+    fi
     zle reset-prompt
+}
+# Use beam shape cursor on startup.
+echo -ne '\e[6 q'
+
+# Use beam shape cursor for each new prompt.
+preexec() {
+   echo -ne '\e[6 q'
 }
 
 zle -N zle-line-init
