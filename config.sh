@@ -25,6 +25,7 @@ mkdir -p ~/.vim/
 mkdir -p ~/.vim_tmp/
 mkdir -p ~/.config/nvim/
 mkdir -p ~/.config/git/
+mkdir -p ~/.hammerspoon/
 
 for filename in \
     .vimrc \
@@ -33,7 +34,8 @@ for filename in \
     .tigrc \
     .bashrc \
     .inputrc \
-    .config/git/config
+    .config/git/config \
+    .hammerspoon/init.lua
 do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/${filename}" "${HOME}/${filename}"; then
         read -p "Overwrite ${HOME}/${filename} ? [y/N]: " yn
