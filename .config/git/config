@@ -13,6 +13,8 @@
 [diff]
     algoritm = histogram
     colorMoved = dimmed-zebra
+[grep]
+    lineNumber = true
 [alias]
     web = !git-remote-web
     com = commit -v
