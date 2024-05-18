@@ -60,7 +60,11 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'altercation/vim-colors-solarized'
+if has('nvim')
+    Plug 'Tsuzat/NeoSolarized.nvim'
+else
+    Plug 'altercation/vim-colors-solarized'
+endif
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
@@ -105,7 +109,11 @@ syntax enable
 set background=dark
 
 try
-    colorscheme solarized
+    if has('nvim')
+        colorscheme NeoSolarized
+    else
+        colorscheme solarized
+    endif
 catch
 endtry
 
