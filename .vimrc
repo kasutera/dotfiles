@@ -68,6 +68,7 @@ endif
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
+Plug 'vim-airline/vim-airline'
 " auto parentheses
 Plug 'cohama/lexima.vim'
 
