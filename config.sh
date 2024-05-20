@@ -35,6 +35,7 @@ for filename in \
     .bashrc \
     .inputrc \
     .config/git/config \
+    .p10k.zsh \
     .hammerspoon/init.lua
 do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/${filename}" "${HOME}/${filename}"; then

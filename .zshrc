@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # ############################################################# #
 # history                                                       #
 # ############################################################# #
@@ -97,8 +104,6 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # ファイル補完候補
 # ############################################################# #
 # prompt                                                        #
 # ############################################################# #
-PROMPT="%F{green}[%n@%m %~]%f "'${vcs_info_msg_0_}'"
-%F{blue}[%D{%m/%d %T}]%f$ "
 SPROMPT="%R -> %r ? [Yes/No/Abort/Edit]"
 
 function zle-line-init zle-keymap-select {
@@ -114,15 +119,15 @@ function zle-line-init zle-keymap-select {
         # beam shape
         echo -ne '\e[6 q'
     fi
-    zle reset-prompt
+    #zle reset-prompt
 }
-# Use beam shape cursor on startup.
-echo -ne '\e[6 q'
 
 # Use beam shape cursor for each new prompt.
-preexec() {
+preexec_cursor() {
    echo -ne '\e[6 q'
 }
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec preexec_cursor
 
 zle -N zle-line-init
 zle -N zle-keymap-select
@@ -302,6 +307,9 @@ fi
 test -e "${HOME}/.zsh_extrc" \
     && source "${HOME}/.zsh_extrc"
 
+test -e "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme" \
+    && source "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme"
+
 # zsh-syntax-highlighting must be end of .zshrc
 if [[ -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
     ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
@@ -317,3 +325,6 @@ if [[ -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" 
     # カーソルがある場所の括弧にマッチする括弧
     ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
 fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
