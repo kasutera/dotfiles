@@ -302,6 +302,11 @@ test -e "${HOME}/.zsh_extrc" \
 test -e "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme" \
     && source "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme"
 
+if [[ -e ~/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source ~/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#626262"
+
 # zsh-syntax-highlighting must be end of .zshrc
 if [[ -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
     ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
