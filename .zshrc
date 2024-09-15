@@ -2,9 +2,7 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 source_if_exists() {
-    if [[ -r "$1" ]]; then
-        source "$1"
-    fi
+    [[ -r "$1" ]] && source "$1"
 }
 source_if_exists "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
@@ -52,30 +50,16 @@ KEYTIMEOUT=1
 # 文字コード
 export LANG=ja_JP.UTF-8
 
-# clang
-# export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:"/opt/local/include/"
-# export LIBRARY_PATH=$LIBRARY_PATH:"/opt/local/lib/"
-
 # ベルを鳴らさない。
 setopt no_beep
 
 # less display prompt (-M), ANSI escape sequence (-R), not to pagenate if less than a page (-F), keep output (-X)
 export LESS='-M -R -F -X'
 
-#export PATH=/opt/local/bin:$PATH
-
 # bat theme
 export BAT_THEME='Solarized (dark)'
 type batcat >> /dev/null && alias bat=batcat
 
-
-function pbf () {
-    echo ${@:1:($#)}
-}
-
-function md2pdf(){
-  pandoc $1.md -o $2.pdf -V documentclass=ltjsarticle --pdf-engine=lualatex
-}
 
 # ############################################################# #
 # completion                                                    #
@@ -116,6 +100,8 @@ function zle-line-init zle-keymap-select {
     fi
     #zle reset-prompt
 }
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 # Use beam shape cursor for each new prompt.
 preexec_cursor() {
@@ -124,92 +110,24 @@ preexec_cursor() {
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec preexec_cursor
 
-zle -N zle-line-init
-zle -N zle-keymap-select
-
-autoload -Uz vcs_info
-setopt prompt_subst
-zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
-zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
-zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
-zstyle ':vcs_info:*' actionformats '[%b|%a]'
-precmd () {
-    vcs_info
-    echo -ne "\e]1;$(basename $PWD)\a"
-}
-
 # ############################################################# #
 # alias                                                         #
 # ############################################################# #
-alias c='clear'
 alias cp='cp -i'
 alias mv='mv -i'
 alias ls='ls -aGF'
 alias cppwd='pwd | pbcopy'
 alias cdcp='cd $(pbpaste)'
-alias ql='qlmanage -p "$@" >& /dev/null'
 alias history-all='history -E 1'
 alias hist-grep='history-all | grep'
 alias emacs='vim'
 alias v='vim'
 alias vi='vim'
 type nvim >> /dev/null && alias vim='nvim'
-alias clang++='clang++ -Wall -Wc++11-extensions'
-alias gcc='clang'
-alias g++='clang++'
 type gdate >> /dev/null && alias date='gdate'
 alias pbtee='tee >(pbcopy)'
 alias tig='tig --all'
 alias :q='exit'
-
-transfer() {
-    # check arguments
-    if [ $# -eq 0 ]; then
-        echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
-        return 1
-    fi
-
-    # get temporarily filename, output is written to this file show progress can be showed
-    tmpfile=$( mktemp -t transferXXX )
-
-    # upload stdin or file
-    file=$1
-
-    if tty -s; then
-        basefile=$(basename "$file" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
-
-        if [ ! -e $file ]; then
-            echo "File $file doesn't exists."
-            return 1
-        fi
-
-        if [ -d $file ]; then
-            # zip directory and transfer
-            zipfile=$( mktemp -t transferXXX.zip )
-            cd $(dirname $file) && zip -r -q - $(basename $file) >> $zipfile
-            curl --progress-bar --upload-file "$zipfile" "https://transfer.sh/$basefile.zip" >> $tmpfile
-            rm -f $zipfile
-        else
-            # transfer file
-            curl --progress-bar --upload-file "$file" "https://transfer.sh/$basefile" >> $tmpfile
-        fi
-    else
-        # transfer pipe
-        curl --progress-bar --upload-file "-" "https://transfer.sh/$file" >> $tmpfile
-    fi
-
-    # cat output link
-    cat $tmpfile
-
-    # cleanup
-    rm -f $tmpfile
-}
-
-# with suffix
-function runc () { g++ $1 && shift && ./a.out $@ }
-function runcpp () { g++ $1 && shift && ./a.out $@ }
-function runawk () { awk -f $@ }
 
 function mmake () {
     if [ -e "Makefile" ]; then
@@ -219,10 +137,7 @@ function mmake () {
     fi
 }
 
-alias -s c=runc
-alias -s cpp=runcpp
 alias -s {png,jpg,bmp,tif,tiff,PNG,JPG,BMP,TIF,TIFF}=open
-alias -s awk=runawk
 
 # ############################################################# #
 # zmv                                                           #
