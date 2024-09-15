@@ -305,6 +305,8 @@ source_if_exists "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme"
 if [[ -e ~/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     source "${HOME}/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh"
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#626262"
+    # use ctrl-p instead of right-arrow
+    bindkey '^p' autosuggest-accept
 fi
 
 # zsh-syntax-highlighting must be end of .zshrc
