@@ -74,14 +74,6 @@ function md2pdf(){
   pandoc $1.md -o $2.pdf -V documentclass=ltjsarticle --pdf-engine=lualatex
 }
 
-csvless(){
-    if [[ $# -eq 0 ]]; then
-        column -s, -t | less -#2 -N -S
-    else
-        column -s, -t < $1 | less -#2 -N -S
-    fi
-}
-
 # ############################################################# #
 # completion                                                    #
 # ############################################################# #
