@@ -1,9 +1,12 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+source_if_exists() {
+    if [[ -r "$1" ]]; then
+        source "$1"
+    fi
+}
+source_if_exists "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
 # ############################################################# #
 # history                                                       #
@@ -286,8 +289,7 @@ bindkey '^m' do_enter
 autoload colors
 colors
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" \
-    && source "${HOME}/.iterm2_shell_integration.zsh"
+source_if_exists "${HOME}/.iterm2_shell_integration.zsh"
 
 # cd-gitroot
 if [[ -e "${HOME}"/dotfiles/cd-gitroot ]]; then
@@ -296,16 +298,14 @@ if [[ -e "${HOME}"/dotfiles/cd-gitroot ]]; then
 fi
 
 # 追加ファイルがあるならインポート
-test -e "${HOME}/.zsh_extrc" \
-    && source "${HOME}/.zsh_extrc"
+source_if_exists "${HOME}/.zsh_extrc"
 
-test -e "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme" \
-    && source "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme"
+source_if_exists "${HOME}/dotfiles/powerlevel10k/powerlevel10k.zsh-theme"
 
 if [[ -e ~/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source ~/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source "${HOME}/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#626262"
 fi
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#626262"
 
 # zsh-syntax-highlighting must be end of .zshrc
 if [[ -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
@@ -322,6 +322,7 @@ if [[ -e "${HOME}/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" 
     # カーソルがある場所の括弧にマッチする括弧
     ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
 fi
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+source_if_exists ~/.p10k.zsh
