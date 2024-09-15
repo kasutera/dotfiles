@@ -53,13 +53,6 @@ export LANG=ja_JP.UTF-8
 # ベルを鳴らさない。
 setopt no_beep
 
-# less display prompt (-M), ANSI escape sequence (-R), not to pagenate if less than a page (-F), keep output (-X)
-export LESS='-M -R -F -X'
-
-# bat theme
-export BAT_THEME='Solarized (dark)'
-type batcat >> /dev/null && alias bat=batcat
-
 
 # ############################################################# #
 # completion                                                    #
@@ -85,6 +78,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # ファイル補完候補
 # ############################################################# #
 SPROMPT="%R -> %r ? [Yes/No/Abort/Edit]"
 
+# Modify shape of prompt
 function zle-line-init zle-keymap-select {
     if [[ ${KEYMAP} == vicmd ]] ||
         [[ $1 = 'block' ]]; then
@@ -203,6 +197,15 @@ bindkey '^m' do_enter
 # 名前で色を付けるようにする
 autoload colors
 colors
+
+# less display prompt (-M), ANSI escape sequence (-R), not to pagenate if less than a page (-F), keep output (-X)
+export LESS='-M -R -F -X'
+
+# bat theme
+if type batcat >> /dev/null; then
+    alias bat=batcat
+    export BAT_THEME='Solarized (dark)'
+fi
 
 source_if_exists "${HOME}/.iterm2_shell_integration.zsh"
 
