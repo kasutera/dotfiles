@@ -9,5 +9,5 @@ if ! type curl > /dev/null; then
     exit 1
 fi
 
-curl -SsL "${URL}" > "${FILENAME}" 
+curl -SsL "${URL}" > "${FILENAME}"
 chmod +x "${FILENAME}"
