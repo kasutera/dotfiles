@@ -1,0 +1,4 @@
+-- Hammerspoon globals
+globals = {
+    "hs"
+}

@@ -39,7 +39,7 @@ for filename in \
     .hammerspoon/init.lua
 do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/${filename}" "${HOME}/${filename}"; then
-        read -p "Overwrite ${HOME}/${filename} ? [y/N]: " yn
+        read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
         case "${yn}" in
             [yY])
                 echo "ok"
@@ -61,7 +61,7 @@ if [[ ! -e "${HOME}"/.gitconfig.local ]]; then
     cp .gitconfig.local "${HOME}/.gitconfig.local"
 fi
 
-read -p "Install plug.vim? [y/N]: " yn
+read -rp "Install plug.vim? [y/N]: " yn
 case "${yn}" in
     [yY])
         ./install_plug.vim.sh
@@ -71,7 +71,7 @@ case "${yn}" in
         echo "Not installed"
 esac
 
-read -p "Install iterm2_shell_integration? [y/N]: " yn
+read -rp "Install iterm2_shell_integration? [y/N]: " yn
 case "${yn}" in
     [yY])
         ./install_iterm2_shell_integration.sh
@@ -81,7 +81,7 @@ case "${yn}" in
         echo "Not installed"
 esac
 
-read -p "Is this remote? (vim colorscheme setting) [y/n]: " yn
+read -rp "Is this remote? (vim colorscheme setting) [y/n]: " yn
 case "${yn}" in
     [yY])
         if ! grep -q "set background" "${VIMRC_EXT}"; then
