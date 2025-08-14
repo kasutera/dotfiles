@@ -12,7 +12,7 @@ set visualbell t_vb=                    " ビープ音なし
 set noswapfile
 set writebackup
 set backupcopy=no
-set cursorline                          "カーソル行のハイライト
+"set cursorline                          "カーソル行のハイライト
 set whichwrap=b,s,h,l,<,>,[,]
 set wildmode=list,full                  "補完設定
 if has("nvim")
@@ -29,7 +29,7 @@ set showcmd
 set smartcase                           "delete keyを機能
 set backspace=indent,eol,start
 set shellcmdflag=-ic                    "シェルの外部コマンドがinteractive に
-:set splitright                         "vspで右に
+set splitright                         "vspで右に
 
 set list
 set listchars=tab:>.
@@ -46,8 +46,6 @@ imap <c-j> <esc>
 " アルファベットのインクリメント
 set nf=alpha
 
-" カレント行ハイライト
-set cursorline
 " アンダーラインを引く(color terminal)
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 " アンダーラインを引く(gui)
@@ -70,7 +68,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 " auto parentheses
-Plug 'cohama/lexima.vim'
+" Plug 'cohama/lexima.vim'
 
 "Pythonmode
 Plug 'davidhalter/jedi-vim'
