@@ -38,7 +38,7 @@ for filename in \
     .p10k.zsh \
     .hammerspoon/init.lua
 do
-    if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/${filename}" "${HOME}/${filename}"; then
+    if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"; then
         read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
         case "${yn}" in
             [yY])
@@ -49,10 +49,10 @@ do
                 continue
         esac
     fi
-    ln -sf "${PWD}/${filename}" "${HOME}/${filename}"
+    ln -sf "${PWD}/src/${filename}" "${HOME}/${filename}"
 done
 
-ln -sf "${PWD}/.vimrc" ~/.config/nvim/init.vim
+ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
 
 touch "${VIMRC_EXT}"
 
