@@ -12,3 +12,16 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+
+  # GitHub Actionsの自動更新
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
