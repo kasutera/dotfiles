@@ -143,15 +143,36 @@ reverse() {
     awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }'
 }
 
-# peco (コマンド検索)
-function peco-history-selection() {
-    BUFFER=$(history -n 1 | reverse | awk '!a[$0]++' | peco)
+# ############################################################## #
+# FILTER                                                         #
+# ############################################################## #
+
+alias FILTER='fzf --query "$LBUFFER"'
+# alias FILTER=peco
+
+# コマンド検索
+function history-selection() {
+    BUFFER=$(history -n 1 | reverse | awk '!a[$0]++' | FILTER)
     CURSOR=$#BUFFER
     zle reset-prompt
 }
 
-zle -N peco-history-selection
-bindkey '^R' peco-history-selection
+zle -N history-selection
+bindkey '^R' history-selection
+
+function git-branch() {
+  local selected_branch=$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/heads | perl -pne 's{^refs/heads/}{}' | FILTER)
+
+  if [ -n "$selected_branch" ]; then
+    BUFFER="git checkout ${selected_branch}"
+    zle accept-line
+  fi
+
+  zle reset-prompt
+}
+
+zle -N git-branch
+bindkey "^b" git-branch
 
 function note() {
     mkdir -p ~/notes/
