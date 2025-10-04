@@ -36,7 +36,7 @@ done
 autoload -U select-quoted
 zle -N select-quoted
 for m in visual viopp; do
-  for c in {a,i}{\',\",\`}; do
+  for c in {a,i}{\`,"'",'"'}; do
     bindkey -M $m $c select-quoted
   done
 done
