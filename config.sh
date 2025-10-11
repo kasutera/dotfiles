@@ -21,11 +21,12 @@ fi
 git submodule init
 git submodule update
 
-mkdir -p ~/.vim/
-mkdir -p ~/.vim_tmp/
-mkdir -p ~/.config/nvim/
-mkdir -p ~/.config/git/
-mkdir -p ~/.hammerspoon/
+mkdir -p \
+    ~/.vim/ \
+    ~/.vim_tmp/ \
+    ~/.config/nvim/ \
+    ~/.config/git/ \
+    ~/.hammerspoon/
 
 for filename in \
     .vimrc \
@@ -86,7 +87,6 @@ case "${yn}" in
     [yY])
         if ! grep -q "set background" "${VIMRC_EXT}"; then
             cat <<-EOF >> "${VIMRC_EXT}"
-
 set background=light
 EOF
         fi
