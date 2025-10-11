@@ -147,12 +147,12 @@ reverse() {
 # FILTER                                                         #
 # ############################################################## #
 
-alias FILTER='fzf --query "$LBUFFER"'
+alias FILTER='fzf --tiebreak=index --query "$LBUFFER"'
 # alias FILTER=peco
 
 # コマンド検索
 function history-selection() {
-    BUFFER=$(history -n 1 | reverse | awk '!a[$0]++' | FILTER)
+    BUFFER=$(history -n 1 | awk '!a[$0]++' | reverse | FILTER)
     CURSOR=$#BUFFER
     zle reset-prompt
 }
