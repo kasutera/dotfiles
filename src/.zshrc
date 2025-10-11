@@ -148,6 +148,9 @@ reverse() {
 # ############################################################## #
 
 alias FILTER='fzf --tiebreak=index --query "$LBUFFER"'
+if ! type fzf >> /dev/null; then
+    echo "fzf not found. please install fzf" >&2
+fi
 # alias FILTER=peco
 
 # コマンド検索

@@ -24,6 +24,11 @@ bind generic C      !git commit -v
 bind refs    C      !git commit -v
 bind main    C      !git commit -v
 
+# どこでもPでpush
+bind generic P      !git push
+bind refs    P      !git push
+bind main    P      !git push
+
 # K で cherry-pick (default: 'C')
 bind main    K      ?git cherry-pick %(commit)
 bind diff    K      ?git cherry-pick %(commit)
