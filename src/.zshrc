@@ -155,7 +155,7 @@ fi
 
 # コマンド検索
 function history-selection() {
-    BUFFER=$(history -n 1 | awk '!a[$0]++' | reverse | FILTER)
+    BUFFER=$(history -n 1 | awk '!a[$0]++' | reverse | FILTER | sed 's/\\n/\n/g')
     CURSOR=$#BUFFER
     zle reset-prompt
 }
