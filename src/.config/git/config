@@ -1,27 +1,27 @@
 [core]
-    editor = "if type nvim > /dev/null; then ED='nvim'; else ED='vim'; fi; $ED"
-#    pager = delta
+	editor = "if type nvim > /dev/null; then ED='nvim'; else ED='vim'; fi; $ED"
+#	pager = delta
 [push]
-    default = simple
+	default = simple
 [pull]
-    ff = only
+	ff = only
 [merge]
-    ff = false
-    conflictstyle = diff3
+	ff = false
+	conflictstyle = diff3
 [commit]
-    verbose = true
+	verbose = true
 [diff]
-    algoritm = histogram
-    colorMoved = dimmed-zebra
+	algoritm = histogram
+	colorMoved = dimmed-zebra
 [grep]
-    lineNumber = true
+	lineNumber = true
 [alias]
-    web = !git-remote-web
-    com = commit -v
+	web = !git-remote-web
+	com = commit -v
 #[interactive]
-#    diffFilter = delta --color-only
+#	diffFilter = delta --color-only
 #[delta]
-#    navigate = true    # use n and N to move between diff sections
-#    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+#	navigate = true    # use n and N to move between diff sections
+#	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 [include]
-    path = ~/.gitconfig.local
+	path = ~/.gitconfig.local
