@@ -66,7 +66,7 @@ fi
 setopt autocd                            # cdつけなくてもcd
 setopt auto_pushd                        # 過去のディレクトリ
 setopt correct                           # 訂正
-autoload -U compinit ; compinit          # オプションを補完
+# autoload -U compinit ; compinit         # zsh-autocompleteを使う場合はコメントアウト
 bindkey "^[[Z" reverse-menu-complete     # Shift-Tabで補完候補を逆順する
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 setopt nonomatch                         # *による補完
@@ -229,6 +229,11 @@ if [[ -e ~/dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#626262"
     # use ctrl-p instead of right-arrow
     bindkey '^p' autosuggest-accept
+fi
+
+# zsh-autocomplete
+if [[ -e "${HOME}/dotfiles/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
+    source "${HOME}/dotfiles/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
 fi
 
 # zsh-syntax-highlighting must be end of .zshrc
