@@ -234,6 +234,12 @@ fi
 # zsh-autocomplete
 if [[ -e "${HOME}/dotfiles/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
     source "${HOME}/dotfiles/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+    # keep vi-command-mode k/j for plain history navigation instead of autocomplete's menu jump
+    bindkey -M vicmd 'k' up-line-or-history
+    bindkey -M vicmd 'j' down-line-or-history
+    # cycle completions on the command line with Tab / Shift-Tab instead of arrow keys
+    bindkey '^I' menu-complete
+    bindkey "$terminfo[kcbt]" reverse-menu-complete
 fi
 
 # zsh-syntax-highlighting must be end of .zshrc
