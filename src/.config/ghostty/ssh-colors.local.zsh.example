@@ -1,0 +1,9 @@
+# Copy this to ~/.config/ghostty/ssh-colors.local.zsh and edit it locally.
+# Do not commit the real local file if it contains private hostnames.
+
+# Hosts listed here keep the normal Ghostty theme.
+# Any SSH host not listed here uses Solarized light while connected.
+GHOSTTY_SSH_LOCAL_HOSTS+=(
+  example-local-host
+  example-local-host.local
+)

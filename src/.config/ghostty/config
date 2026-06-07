@@ -1,0 +1,63 @@
+# Ghostty configuration generated from iterm_profiles.json.
+
+# Font
+font-family = Iosevka Term
+font-style = Extended
+font-style-bold = Bold Extended
+font-style-italic = Extended Italic
+font-style-bold-italic = Bold Extended Italic
+font-size = 15
+font-synthetic-style = true
+
+# Window
+window-width = 100
+window-height = 52
+working-directory = /Users/kasutera
+window-step-resize = true
+
+# Solarized dark
+background = #002b36
+foreground = #839496
+bold-color = #93a1a1
+cursor-color = #839496
+cursor-text = #073642
+selection-background = #073642
+selection-foreground = #93a1a1
+
+palette = 0=#073642
+palette = 1=#dc322f
+palette = 2=#859900
+palette = 3=#b58900
+palette = 4=#268bd2
+palette = 5=#d33682
+palette = 6=#2aa198
+palette = 7=#eee8d5
+palette = 8=#002b36
+palette = 9=#cb4b16
+palette = 10=#586e75
+palette = 11=#657b83
+palette = 12=#839496
+palette = 13=#6c71c4
+palette = 14=#93a1a1
+palette = 15=#fdf6e3
+
+# Appearance
+background-opacity = 0.9416478737113402
+background-opacity-cells = true
+background-blur = false
+cursor-style = block
+cursor-style-blink = false
+mouse-reporting = true
+
+# Behavior
+scrollback-limit = 10000000
+confirm-close-surface = false
+bell-features = system,attention
+link-url = true
+
+# Keep Ghostty's SSH terminfo support while letting zsh manage SSH titles/colors.
+shell-integration = detect
+shell-integration-features = cursor,sudo,ssh-env,ssh-terminfo,path,no-title
+
+# iTerm2's per-host profile binding is implemented by zsh + OSC sequences.
+# See ssh-colors.zsh.

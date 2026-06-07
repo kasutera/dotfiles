@@ -211,7 +211,7 @@ if type batcat >> /dev/null; then
     export BAT_THEME='Solarized (dark)'
 fi
 
-source_if_exists "${HOME}/.iterm2_shell_integration.zsh"
+source_if_exists "${HOME}/.config/ghostty/ssh-colors.zsh"
 
 # cd-gitroot
 if [[ -e "${HOME}"/dotfiles/cd-gitroot ]]; then

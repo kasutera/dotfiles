@@ -25,6 +25,7 @@ mkdir -p \
     ~/.vim/ \
     ~/.vim_tmp/ \
     ~/.config/nvim/ \
+    ~/.config/ghostty/ \
     ~/.config/git/ \
     ~/.hammerspoon/
 
@@ -35,6 +36,8 @@ for filename in \
     .tigrc \
     .bashrc \
     .inputrc \
+    .config/ghostty/config \
+    .config/ghostty/ssh-colors.zsh \
     .config/git/config \
     .p10k.zsh \
     .hammerspoon/init.lua
@@ -66,16 +69,6 @@ read -rp "Install plug.vim? [y/N]: " yn
 case "${yn}" in
     [yY])
         ./install_plug.vim.sh
-        echo "Installed"
-        ;;
-    *)
-        echo "Not installed"
-esac
-
-read -rp "Install iterm2_shell_integration? [y/N]: " yn
-case "${yn}" in
-    [yY])
-        ./install_iterm2_shell_integration.sh
         echo "Installed"
         ;;
     *)
