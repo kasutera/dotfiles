@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=SC1090,SC2154
+# shellcheck disable=SC1090,SC2059,SC2154
 # Change Ghostty colors while an ssh session is active.
 # This uses OSC 10/11/12, so colors are per terminal surface and reset on exit.
 
@@ -68,21 +68,29 @@ _ghostty_ssh_is_local_host() {
   return 1
 }
 
+_ghostty_ssh_color_printf() {
+  if [[ -w /dev/tty ]]; then
+    printf "$@" > /dev/tty
+  else
+    printf "$@"
+  fi
+}
+
 _ghostty_ssh_color_apply() {
   local host="$1"
   local short="${host%%.*}"
 
-  printf "\033]10;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_FOREGROUND"
-  printf "\033]11;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_BACKGROUND"
-  printf "\033]12;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_CURSOR"
-  printf "\033]2;ssh: %s\033\\\\" "$short"
+  _ghostty_ssh_color_printf "\033]10;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_FOREGROUND"
+  _ghostty_ssh_color_printf "\033]11;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_BACKGROUND"
+  _ghostty_ssh_color_printf "\033]12;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_CURSOR"
+  _ghostty_ssh_color_printf "\033]2;ssh: %s\033\\\\" "$short"
 }
 
 _ghostty_ssh_color_reset() {
-  printf "\033]110\033\\\\"
-  printf "\033]111\033\\\\"
-  printf "\033]112\033\\\\"
-  printf "\033]2;%s\033\\\\" "${PWD/#$HOME/~}"
+  _ghostty_ssh_color_printf "\033]110\033\\\\"
+  _ghostty_ssh_color_printf "\033]111\033\\\\"
+  _ghostty_ssh_color_printf "\033]112\033\\\\"
+  _ghostty_ssh_color_printf "\033]2;%s\033\\\\" "${PWD/#$HOME/~}"
 }
 
 ghostty-ssh-color-test() {
@@ -93,8 +101,13 @@ ghostty-ssh-color-reset() {
   _ghostty_ssh_color_reset
 }
 
+if (( $+functions[_ghostty_ssh_color_original_ssh] )) &&
+  [[ "$(functions _ghostty_ssh_color_original_ssh)" == *"_ghostty_ssh_color_apply"* ]]; then
+  unfunction _ghostty_ssh_color_original_ssh
+fi
+
 if (( ! $+functions[_ghostty_ssh_color_original_ssh] )); then
-  if (( $+functions[ssh] )); then
+  if (( $+functions[ssh] )) && [[ "$(functions ssh)" != *"_ghostty_ssh_color_apply"* ]]; then
     functions -c ssh _ghostty_ssh_color_original_ssh
   else
     _ghostty_ssh_color_original_ssh() {
@@ -107,7 +120,6 @@ ssh() {
   setopt local_options no_bg_nice
 
   local host ret
-  local -a reapply_pids
   host="$(_ghostty_ssh_color_host "$@")"
 
   if [[ -n "$host" ]] && ! _ghostty_ssh_is_local_host "$host"; then
@@ -115,14 +127,6 @@ ssh() {
     if [[ -n "${GHOSTTY_SSH_COLOR_DEBUG:-}" ]]; then
       print -ru2 -- "ghostty-ssh-colors: apply host=${host}"
     fi
-    local delay
-    for delay in 0.15 0.5 1.5; do
-      (
-        sleep "$delay"
-        _ghostty_ssh_color_apply "$host"
-      ) &
-      reapply_pids+=("$!")
-    done
   elif [[ -n "$host" && -n "${GHOSTTY_SSH_COLOR_DEBUG:-}" ]]; then
     print -ru2 -- "ghostty-ssh-colors: keep default theme for local host=${host}"
   fi
@@ -130,13 +134,7 @@ ssh() {
   _ghostty_ssh_color_original_ssh "$@"
   ret=$?
 
-  if (( ${#reapply_pids[@]} )); then
-    local pid
-    for pid in "${reapply_pids[@]}"; do
-      kill "$pid" 2>/dev/null || true
-    done
-    _ghostty_ssh_color_reset
-  fi
+  [[ -n "$host" ]] && ! _ghostty_ssh_is_local_host "$host" && _ghostty_ssh_color_reset
 
   return "$ret"
 }
