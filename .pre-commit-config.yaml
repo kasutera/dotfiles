@@ -11,8 +11,8 @@ repos:
       - id: mixed-line-ending
 
   # ShellCheck - シェルスクリプト解析
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.11.0
+  - repo: https://github.com/ryanrhee/shellcheck-py
+    rev: v0.11.0.1
     hooks:
       - id: shellcheck
         files: \.(sh|bash|zsh)$
