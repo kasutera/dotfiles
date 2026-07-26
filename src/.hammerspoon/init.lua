@@ -48,6 +48,36 @@ end
 appsWatcher = hs.application.watcher.new(handleGlobalAppEvent)
 appsWatcher:start()
 
+-- torabo-tsuki 向け。 layer5 (マウスモード) のときを判別可能にするため
+-- https://github.com/kasutera/zmk-keyboard-torabo-tsuki-lp/pull/3
+local layer5Menu = hs.menubar.new()
+layer5Menu:setTitle("⚪️")
+
+layer5Watcher = hs.eventtap.new({
+   hs.eventtap.event.types.keyDown,
+   hs.eventtap.event.types.keyUp,
+}, function(event)
+   local keyCode = event:getKeyCode()
+   local eventType = event:getType()
+
+   if keyCode == hs.keycodes.map.f16 then
+      if eventType == hs.eventtap.event.types.keyDown then
+         layer5Menu:setTitle("🔴")
+      end
+      return true
+   end
+
+   if keyCode == hs.keycodes.map.f17 then
+      if eventType == hs.eventtap.event.types.keyDown then
+         layer5Menu:setTitle("⚪️")
+      end
+      return true
+   end
+
+   return false
+end)
+layer5Watcher:start()
+
 -- コマンド
 remapKey({'ctrl'}, '[', keyCode('escape'))
 remapKey({'ctrl'}, 'j', keyCode('escape'))
