@@ -28,7 +28,8 @@ mkdir -p \
     ~/.config/ghostty/ \
     ~/.config/git/ \
     ~/.hammerspoon/ \
-    ~/.codex/rules/
+    ~/.codex/rules/ \
+    ~/.codex/skills/gh-run-safely/agents/
 
 for filename in \
     .vimrc \
@@ -42,7 +43,9 @@ for filename in \
     .config/git/config \
     .p10k.zsh \
     .hammerspoon/init.lua \
-    .codex/rules/gh.rules
+    .codex/rules/gh.rules \
+    .codex/skills/gh-run-safely/SKILL.md \
+    .codex/skills/gh-run-safely/agents/openai.yaml
 do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"; then
         read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn

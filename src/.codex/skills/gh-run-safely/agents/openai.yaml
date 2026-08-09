@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run GitHub CLI Safely"
+  short_description: "Run gh with sandbox escalation and execpolicy"
+  default_prompt: "Use $gh-run-safely to perform this GitHub CLI task under my execpolicy rules."
