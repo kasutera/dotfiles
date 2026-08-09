@@ -1,0 +1,828 @@
+# ============================================================================
+# READ-ONLY — allow
+# ============================================================================
+
+# --- General ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "browse"],
+    decision = "allow",
+    justification = "Opens or prints GitHub URLs without modifying GitHub state.",
+)
+
+prefix_rule(
+    pattern = ["gh", "status"],
+    decision = "allow",
+    justification = "Reads GitHub work status.",
+)
+
+prefix_rule(
+    pattern = ["gh", "licenses"],
+    decision = "allow",
+    justification = "Displays licenses bundled with GitHub CLI.",
+)
+
+prefix_rule(
+    pattern = ["gh", "completion"],
+    decision = "allow",
+    justification = "Generates shell completion text.",
+)
+
+
+# --- Authentication ---------------------------------------------------------
+#
+# NOTE: `gh auth status --show-token` can print credentials.
+# prefix_rule cannot require end-of-command, so allowing `gh auth status`
+# technically also permits that flag. See notes below.
+
+prefix_rule(
+    pattern = ["gh", "auth", "status"],
+    decision = "allow",
+    justification = "Checks GitHub authentication; needed to avoid false auth failures caused by sandbox restrictions.",
+)
+
+
+# --- Pull requests ----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "pr", [
+        "list",
+        "status",
+        "view",
+        "checks",
+        "diff",
+    ]],
+    decision = "allow",
+    justification = "Read-only pull request inspection.",
+)
+
+# Checkout mutates only the local working tree, not GitHub state.
+prefix_rule(
+    pattern = ["gh", "pr", "checkout"],
+    decision = "allow",
+    justification = "Checks out an existing PR locally without modifying GitHub state.",
+)
+
+
+# --- Issues ----------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "issue", [
+        "list",
+        "status",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Read-only issue inspection.",
+)
+
+
+# --- Discussions ------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "discussion", [
+        "list",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Read-only discussion inspection.",
+)
+
+
+# --- Repositories -----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "repo", [
+        "list",
+        "view",
+        "read-dir",
+        "read-file",
+        "clone",
+    ]],
+    decision = "allow",
+    justification = "Reads or downloads repository content without modifying GitHub state.",
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "gitignore", [
+        "list",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Reads GitHub gitignore templates.",
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "license", [
+        "list",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Reads repository license templates.",
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "autolink", [
+        "list",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Reads repository autolink configuration.",
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "deploy-key", "list"],
+    decision = "allow",
+    justification = "Lists repository deploy keys without changing them.",
+)
+
+
+# --- Organizations ----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "org", "list"],
+    decision = "allow",
+    justification = "Lists organizations.",
+)
+
+
+# --- Gists -----------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "gist", [
+        "list",
+        "view",
+        "clone",
+    ]],
+    decision = "allow",
+    justification = "Reads or clones gists.",
+)
+
+
+# --- Projects ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "project", [
+        "list",
+        "view",
+        "field-list",
+        "item-list",
+    ]],
+    decision = "allow",
+    justification = "Read-only GitHub Projects inspection.",
+)
+
+
+# --- Releases ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "release", [
+        "list",
+        "view",
+        "download",
+        "verify",
+        "verify-asset",
+    ]],
+    decision = "allow",
+    justification = "Reads, downloads, or verifies release information and assets.",
+)
+
+
+# --- Actions: runs ----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "run", [
+        "list",
+        "view",
+        "watch",
+        "download",
+    ]],
+    decision = "allow",
+    justification = "Read-only GitHub Actions run inspection.",
+)
+
+
+# --- Actions: workflows -----------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "workflow", [
+        "list",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Read-only workflow inspection.",
+)
+
+
+# --- Actions: caches --------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "cache", "list"],
+    decision = "allow",
+    justification = "Lists GitHub Actions caches.",
+)
+
+
+# --- Search ----------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "search", [
+        "code",
+        "commits",
+        "issues",
+        "prs",
+        "repos",
+    ]],
+    decision = "allow",
+    justification = "Read-only GitHub search.",
+)
+
+
+# --- Rulesets ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "ruleset", [
+        "check",
+        "list",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Reads repository rulesets.",
+)
+
+
+# --- Attestations -----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "attestation", [
+        "download",
+        "trusted-root",
+        "verify",
+    ]],
+    decision = "allow",
+    justification = "Downloads or verifies artifact attestations without modifying GitHub state.",
+)
+
+
+# --- Secrets ---------------------------------------------------------------
+#
+# `list` returns metadata/names, not secret values.
+
+prefix_rule(
+    pattern = ["gh", "secret", "list"],
+    decision = "allow",
+    justification = "Lists secret metadata without revealing secret values.",
+)
+
+
+# --- Variables --------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "variable", [
+        "get",
+        "list",
+    ]],
+    decision = "allow",
+    justification = "Reads GitHub variables.",
+)
+
+
+# --- SSH / GPG keys ---------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "ssh-key", "list"],
+    decision = "allow",
+    justification = "Lists registered SSH keys.",
+)
+
+prefix_rule(
+    pattern = ["gh", "gpg-key", "list"],
+    decision = "allow",
+    justification = "Lists registered GPG keys.",
+)
+
+
+# --- Labels ----------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "label", "list"],
+    decision = "allow",
+    justification = "Lists repository labels.",
+)
+
+
+# --- Codespaces: inspection -------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "codespace", [
+        "list",
+        "view",
+        "logs",
+        "ports",
+    ]],
+    decision = "allow",
+    justification = "Inspects Codespaces without intentionally modifying them.",
+)
+
+
+# --- Agent tasks ------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "agent-task", [
+        "list",
+        "view",
+    ]],
+    decision = "allow",
+    justification = "Reads GitHub agent task state.",
+)
+
+
+# --- Aliases/config ---------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "alias", "list"],
+    decision = "allow",
+    justification = "Lists local gh aliases.",
+)
+
+prefix_rule(
+    pattern = ["gh", "config", [
+        "get",
+        "list",
+        "clear-cache",
+    ]],
+    decision = "allow",
+    justification = "Reads gh configuration or clears expendable local cache.",
+)
+
+
+# --- Extensions: discovery only --------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "extension", [
+        "list",
+        "search",
+    ]],
+    decision = "allow",
+    justification = "Lists or searches GitHub CLI extensions without executing them.",
+)
+
+
+# --- Skills: discovery / inspection ----------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "skill", [
+        "list",
+        "search",
+        "preview",
+    ]],
+    decision = "allow",
+    justification = "Lists, searches, or previews GitHub agent skills.",
+)
+
+
+# --- Preview tooling --------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "preview", "prompter"],
+    decision = "allow",
+    justification = "Runs GitHub CLI's local prompter preview utility.",
+)
+
+
+# ============================================================================
+# MUTATION — prompt / Auto-review
+# ============================================================================
+
+# --- Pull requests ----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "pr", [
+        "create",
+        "close",
+        "comment",
+        "edit",
+        "lock",
+        "ready",
+        "reopen",
+        "revert",
+        "review",
+        "unlock",
+        "update-branch",
+    ]],
+    decision = "prompt",
+    justification = "Modifies pull request state or content.",
+)
+
+
+# --- Issues ----------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "issue", [
+        "create",
+        "close",
+        "comment",
+        "develop",
+        "edit",
+        "lock",
+        "pin",
+        "reopen",
+        "transfer",
+        "unlock",
+        "unpin",
+    ]],
+    decision = "prompt",
+    justification = "Modifies issue state or content.",
+)
+
+
+# --- Discussions ------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "discussion", [
+        "create",
+        "comment",
+        "edit",
+    ]],
+    decision = "prompt",
+    justification = "Creates or modifies GitHub Discussions.",
+)
+
+
+# --- Repositories -----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "repo", [
+        "create",
+        "archive",
+        "unarchive",
+        "edit",
+        "fork",
+        "rename",
+        "set-default",
+        "sync",
+    ]],
+    decision = "prompt",
+    justification = "Creates or modifies repository or local repository configuration.",
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "autolink", [
+        "create",
+        "delete",
+    ]],
+    decision = "prompt",
+    justification = "Modifies repository autolink configuration.",
+)
+
+
+# --- Gists -----------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "gist", [
+        "create",
+        "edit",
+        "rename",
+    ]],
+    decision = "prompt",
+    justification = "Creates or modifies gists.",
+)
+
+
+# --- Projects ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "project", [
+        "close",
+        "copy",
+        "create",
+        "edit",
+        "field-create",
+        "field-delete",
+        "item-add",
+        "item-archive",
+        "item-create",
+        "item-delete",
+        "item-edit",
+        "link",
+        "mark-template",
+        "unlink",
+    ]],
+    decision = "prompt",
+    justification = "Modifies GitHub Projects.",
+)
+
+
+# --- Releases ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "release", [
+        "create",
+        "edit",
+        "upload",
+    ]],
+    decision = "prompt",
+    justification = "Creates or modifies GitHub releases.",
+)
+
+
+# --- Actions ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "run", [
+        "cancel",
+        "rerun",
+    ]],
+    decision = "prompt",
+    justification = "Changes GitHub Actions run state.",
+)
+
+prefix_rule(
+    pattern = ["gh", "workflow", [
+        "run",
+        "enable",
+        "disable",
+    ]],
+    decision = "prompt",
+    justification = "Starts or changes GitHub Actions workflows.",
+)
+
+prefix_rule(
+    pattern = ["gh", "cache", "delete"],
+    decision = "prompt",
+    justification = "Deletes GitHub Actions caches.",
+)
+
+
+# --- Variables --------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "variable", [
+        "set",
+        "delete",
+    ]],
+    decision = "prompt",
+    justification = "Modifies GitHub variables.",
+)
+
+
+# --- Labels ----------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "label", [
+        "clone",
+        "create",
+        "delete",
+        "edit",
+    ]],
+    decision = "prompt",
+    justification = "Modifies repository labels.",
+)
+
+
+# --- Codespaces -------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "codespace", [
+        "create",
+        "edit",
+        "stop",
+        "cp",
+    ]],
+    decision = "prompt",
+    justification = "Creates or modifies a Codespace or transfers files.",
+)
+
+prefix_rule(
+    pattern = ["gh", "codespace", "ports", [
+        "forward",
+        "visibility",
+    ]],
+    decision = "prompt",
+    justification = "Changes Codespace port forwarding or visibility.",
+)
+
+
+# --- Agent tasks ------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "agent-task", "create"],
+    decision = "prompt",
+    justification = "Starts a remote GitHub agent task.",
+)
+
+
+# --- Local gh configuration -------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "alias", "delete"],
+    decision = "prompt",
+    justification = "Deletes local gh aliases.",
+)
+
+prefix_rule(
+    pattern = ["gh", "config", "set"],
+    decision = "prompt",
+    justification = "Changes local gh configuration.",
+)
+
+
+# ============================================================================
+# DANGEROUS / SENSITIVE — forbidden
+# ============================================================================
+
+# --- Arbitrary GitHub API ---------------------------------------------------
+#
+# `gh api` can issue arbitrary REST/GraphQL mutations, including DELETE.
+
+prefix_rule(
+    pattern = ["gh", "api"],
+    decision = "forbidden",
+    justification = "Use a purpose-specific gh subcommand instead; arbitrary authenticated API access bypasses command-level safety classification.",
+)
+
+
+# --- Authentication / credentials ------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "auth", [
+        "login",
+        "logout",
+        "refresh",
+        "setup-git",
+        "switch",
+        "token",
+    ]],
+    decision = "forbidden",
+    justification = "Authentication credentials or active identity must be managed manually outside Codex.",
+)
+
+
+# --- Destructive repository operations -------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "repo", "delete"],
+    decision = "forbidden",
+    justification = "Repository deletion must be performed manually.",
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "deploy-key", [
+        "add",
+        "delete",
+    ]],
+    decision = "forbidden",
+    justification = "Repository deploy-key changes must be performed manually.",
+)
+
+
+# --- Destructive issue / PR operations -------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "issue", "delete"],
+    decision = "forbidden",
+    justification = "Permanent issue deletion must be performed manually.",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "forbidden",
+    justification = "Final PR merge should be an explicit human action rather than Auto-review approval.",
+)
+
+
+# --- Destructive project / release/run operations ---------------------------
+
+prefix_rule(
+    pattern = ["gh", "project", "delete"],
+    decision = "forbidden",
+    justification = "Project deletion must be performed manually.",
+)
+
+prefix_rule(
+    pattern = ["gh", "release", [
+        "delete",
+        "delete-asset",
+    ]],
+    decision = "forbidden",
+    justification = "Release or release-asset deletion must be performed manually.",
+)
+
+prefix_rule(
+    pattern = ["gh", "run", "delete"],
+    decision = "forbidden",
+    justification = "Workflow run deletion must be performed manually.",
+)
+
+
+# --- Secrets ---------------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "secret", [
+        "set",
+        "delete",
+    ]],
+    decision = "forbidden",
+    justification = "GitHub secrets must be managed manually outside Codex.",
+)
+
+
+# --- Account keys -----------------------------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "ssh-key", [
+        "add",
+        "delete",
+    ]],
+    decision = "forbidden",
+    justification = "Account SSH-key changes must be performed manually.",
+)
+
+prefix_rule(
+    pattern = ["gh", "gpg-key", [
+        "add",
+        "delete",
+    ]],
+    decision = "forbidden",
+    justification = "Account GPG-key changes must be performed manually.",
+)
+
+
+# --- Arbitrary / third-party executable execution ---------------------------
+#
+# GitHub explicitly notes that extensions are third-party executables and
+# are not verified, signed, or endorsed by GitHub.
+
+prefix_rule(
+    pattern = ["gh", "extension", [
+        "exec",
+        "install",
+        "upgrade",
+        "browse",
+    ]],
+    decision = "forbidden",
+    justification = "GitHub CLI extensions execute third-party code; review and manage them manually.",
+)
+
+prefix_rule(
+    pattern = ["gh", "extension", [
+        "create",
+        "remove",
+    ]],
+    decision = "prompt",
+    justification = "Changes locally installed GitHub CLI extension state.",
+)
+
+
+# `gh copilot` invokes another agent/CLI that may itself run tools.
+prefix_rule(
+    pattern = ["gh", "copilot"],
+    decision = "forbidden",
+    justification = "Do not nest another tool-using coding agent inside Codex.",
+)
+
+
+# Shell aliases can expand into arbitrary commands.
+prefix_rule(
+    pattern = ["gh", "alias", [
+        "set",
+        "import",
+    ]],
+    decision = "forbidden",
+    justification = "gh aliases can contain arbitrary shell expansions; configure them manually.",
+)
+
+
+# --- Codespace arbitrary execution / destructive lifecycle -----------------
+
+prefix_rule(
+    pattern = ["gh", "codespace", [
+        "ssh",
+        "code",
+        "jupyter",
+        "delete",
+        "rebuild",
+    ]],
+    decision = "forbidden",
+    justification = "Remote command execution or destructive Codespace lifecycle operations require explicit manual control.",
+)
+
+
+# --- Skills ----------------------------------------------------------------
+#
+# Installing/updating skills changes instructions/code available to agents.
+
+prefix_rule(
+    pattern = ["gh", "skill", [
+        "install",
+        "update",
+    ]],
+    decision = "forbidden",
+    justification = "Agent skills can change agent behavior; install or update them manually.",
+)
+
+prefix_rule(
+    pattern = ["gh", "skill", "publish"],
+    decision = "prompt",
+    justification = "Publishing an agent skill modifies remote GitHub state.",
+)

@@ -27,7 +27,8 @@ mkdir -p \
     ~/.config/nvim/ \
     ~/.config/ghostty/ \
     ~/.config/git/ \
-    ~/.hammerspoon/
+    ~/.hammerspoon/ \
+    ~/.codex/rules/
 
 for filename in \
     .vimrc \
@@ -40,7 +41,8 @@ for filename in \
     .config/ghostty/ssh-colors.zsh \
     .config/git/config \
     .p10k.zsh \
-    .hammerspoon/init.lua
+    .hammerspoon/init.lua \
+    .codex/rules/gh.rules
 do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"; then
         read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
