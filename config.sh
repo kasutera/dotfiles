@@ -29,7 +29,7 @@ mkdir -p \
     ~/.config/git/ \
     ~/.hammerspoon/ \
     ~/.codex/rules/ \
-    ~/.codex/skills/gh-run-safely/agents/
+    ~/.agents/skills/gh-run-safely/agents/
 
 for filename in \
     .vimrc \
@@ -43,9 +43,7 @@ for filename in \
     .config/git/config \
     .p10k.zsh \
     .hammerspoon/init.lua \
-    .codex/rules/gh.rules \
-    .codex/skills/gh-run-safely/SKILL.md \
-    .codex/skills/gh-run-safely/agents/openai.yaml
+    .codex/rules/gh.rules
 do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"; then
         read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
@@ -59,6 +57,29 @@ do
         esac
     fi
     ln -sf "${PWD}/src/${filename}" "${HOME}/${filename}"
+done
+
+for filename in \
+    .agents/skills/gh-run-safely/SKILL.md \
+    .agents/skills/gh-run-safely/agents/openai.yaml
+do
+    if { [[ -e "${HOME}/${filename}" ]] || [[ -L "${HOME}/${filename}" ]]; } && \
+        ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"
+    then
+        read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
+        case "${yn}" in
+            [yY])
+                echo "ok"
+                ;;
+            *)
+                echo "continue"
+                continue
+        esac
+    fi
+    if [[ -L "${HOME}/${filename}" ]]; then
+        unlink "${HOME}/${filename}"
+    fi
+    cp "${PWD}/src/${filename}" "${HOME}/${filename}"
 done
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
