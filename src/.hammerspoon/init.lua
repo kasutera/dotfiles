@@ -10,31 +10,23 @@ local function keyCode(key, modifiers)
    end
 end
 
-local function keyCodeSet(keys)
-   return function()
-      for i, keyEvent in ipairs(keys) do
-         keyEvent()
-      end
-   end
-end
-
-local function remapKey(modifiers, key, keyCode)
-   hs.hotkey.bind(modifiers, key, keyCode, nil, keyCode)
+local function remapKey(modifiers, key, keyHandler)
+   hs.hotkey.bind(modifiers, key, keyHandler, nil, keyHandler)
 end
 
 local function disableAllHotkeys()
-   for k, v in pairs(hs.hotkey.getHotkeys()) do
+   for _, v in pairs(hs.hotkey.getHotkeys()) do
       v['_hk']:disable()
    end
 end
 
 local function enableAllHotkeys()
-   for k, v in pairs(hs.hotkey.getHotkeys()) do
+   for _, v in pairs(hs.hotkey.getHotkeys()) do
       v['_hk']:enable()
    end
 end
 
-local function handleGlobalAppEvent(name, event, app)
+local function handleGlobalAppEvent(name, event, _app)
    if event == hs.application.watcher.activated then
       -- hs.alert.show(name)
       if name == "iTerm2" then
@@ -57,17 +49,17 @@ layer5Watcher = hs.eventtap.new({
    hs.eventtap.event.types.keyDown,
    hs.eventtap.event.types.keyUp,
 }, function(event)
-   local keyCode = event:getKeyCode()
+   local eventKeyCode = event:getKeyCode()
    local eventType = event:getType()
 
-   if keyCode == hs.keycodes.map.f16 then
+   if eventKeyCode == hs.keycodes.map.f16 then
       if eventType == hs.eventtap.event.types.keyDown then
          layer5Menu:setTitle("🔴")
       end
       return true
    end
 
-   if keyCode == hs.keycodes.map.f17 then
+   if eventKeyCode == hs.keycodes.map.f17 then
       if eventType == hs.eventtap.event.types.keyDown then
          layer5Menu:setTitle("⚪️")
       end
@@ -89,7 +81,7 @@ remapKey({'ctrl'}, 'h', keyCode('delete'))
 
 local deferred = false
 
-overrideRightMouseDown = hs.eventtap.new({ hs.eventtap.event.types.rightMouseDown }, function(e)
+overrideRightMouseDown = hs.eventtap.new({ hs.eventtap.event.types.rightMouseDown }, function()
     --print("down"))
     deferred = true
     return true

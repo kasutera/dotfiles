@@ -17,3 +17,12 @@ repos:
       - id: shellcheck
         files: \.(sh|bash|zsh)$
         exclude: \.p10k\.zsh$
+
+  # Luacheck - Lua 静的解析
+  - repo: local
+    hooks:
+      - id: luacheck
+        name: Luacheck
+        entry: luacheck --config .luacheckrc
+        language: system
+        types: [lua]
