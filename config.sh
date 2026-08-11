@@ -92,35 +92,41 @@ done
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
 
-touch "${VIMRC_EXT}"
-
 # copy gitconfig's init setting
 if [[ ! -e "${HOME}"/.gitconfig.local ]]; then
     cp .gitconfig.local "${HOME}/.gitconfig.local"
 fi
 
-read -rp "Install plug.vim? [y/N]: " yn
-case "${yn}" in
-    [yY])
-        ./install_plug.vim.sh
-        echo "Installed"
-        ;;
-    *)
-        echo "Not installed"
-esac
+# plug.vim
+VIM_PLUG_PATH="${HOME}/.vim/autoload/plug.vim"
+NVIM_PLUG_PATH="${XDG_DATA_HOME:-${HOME}/.local/share}/nvim/site/autoload/plug.vim"
 
-read -rp "Is this remote? (vim colorscheme setting) [y/n]: " yn
-case "${yn}" in
-    [yY])
-        if ! grep -q "set background" "${VIMRC_EXT}"; then
+if [[ ! -e "${VIM_PLUG_PATH}" || ! -e "${NVIM_PLUG_PATH}" ]]; then
+    read -rp "Install plug.vim? [y/N]: " yn
+    case "${yn}" in
+        [yY])
+            ./install_plug.vim.sh
+            echo "Installed"
+            ;;
+        *)
+            echo "Not installed"
+    esac
+fi
+
+# remote / local setting
+if [[ ! -e "${VIMRC_EXT}" ]]; then
+    read -rp "Is this remote? (vim colorscheme setting) [y/n]: " yn
+    case "${yn}" in
+        [yY])
             cat <<-EOF >> "${VIMRC_EXT}"
 set background=light
 EOF
-        fi
-        ;;
-    [nN])
-        ;;
-    *)
-        echo "abort"
-        exit 1
-esac
+            ;;
+        [nN])
+            touch "${VIMRC_EXT}"
+            ;;
+        *)
+            echo "abort"
+            exit 1
+    esac
+fi
