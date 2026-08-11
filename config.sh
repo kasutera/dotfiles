@@ -29,7 +29,7 @@ mkdir -p \
     ~/.config/git/ \
     ~/.hammerspoon/ \
     ~/.codex/rules/ \
-    ~/.agents/skills/gh-run-safely/agents/
+    ~/.agents/skills/
 
 for filename in \
     .vimrc \
@@ -59,14 +59,19 @@ do
     ln -sf "${PWD}/src/${filename}" "${HOME}/${filename}"
 done
 
-for filename in \
-    .agents/skills/gh-run-safely/SKILL.md \
-    .agents/skills/gh-run-safely/agents/openai.yaml
+for skill_source in "${PWD}"/src/.agents/skills/*
 do
-    if { [[ -e "${HOME}/${filename}" ]] || [[ -L "${HOME}/${filename}" ]]; } && \
-        ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"
+    if [[ ! -d "${skill_source}" ]]; then
+        continue
+    fi
+
+    skill_name="${skill_source##*/}"
+    skill_destination="${HOME}/.agents/skills/${skill_name}"
+
+    if { [[ -e "${skill_destination}" ]] || [[ -L "${skill_destination}" ]]; } && \
+        ! diff -qr "${skill_source}" "${skill_destination}"
     then
-        read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
+        read -rp "Overwrite ${skill_destination} ? [y/N]: " yn
         case "${yn}" in
             [yY])
                 echo "ok"
@@ -76,10 +81,13 @@ do
                 continue
         esac
     fi
-    if [[ -L "${HOME}/${filename}" ]]; then
-        unlink "${HOME}/${filename}"
+
+    if [[ -L "${skill_destination}" ]]; then
+        unlink "${skill_destination}"
+    elif [[ -e "${skill_destination}" ]]; then
+        rm -rf "${skill_destination}"
     fi
-    cp "${PWD}/src/${filename}" "${HOME}/${filename}"
+    ln -s "${skill_source}" "${skill_destination}"
 done
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
