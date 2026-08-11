@@ -13,7 +13,7 @@ if [[ "${PWD}" != "${HOME}/dotfiles" ]]; then
     exit 1
 fi
 
-if ! type git > /dev/null; then
+if ! type git >/dev/null; then
     echo "ERROR: Please install git first" >&2
     exit 1
 fi
@@ -43,24 +43,23 @@ for filename in \
     .config/git/config \
     .p10k.zsh \
     .hammerspoon/init.lua \
-    .codex/rules/gh.rules
-do
+    .codex/rules/gh.rules; do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"; then
         read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
         case "${yn}" in
-            [yY])
-                echo "ok"
-                ;;
-            *)
-                echo "continue"
-                continue
+        [yY])
+            echo "ok"
+            ;;
+        *)
+            echo "continue"
+            continue
+            ;;
         esac
     fi
     ln -sf "${PWD}/src/${filename}" "${HOME}/${filename}"
 done
 
-for skill_source in "${PWD}"/src/.agents/skills/*
-do
+for skill_source in "${PWD}"/src/.agents/skills/*; do
     if [[ ! -d "${skill_source}" ]]; then
         continue
     fi
@@ -68,17 +67,17 @@ do
     skill_name="${skill_source##*/}"
     skill_destination="${HOME}/.agents/skills/${skill_name}"
 
-    if { [[ -e "${skill_destination}" ]] || [[ -L "${skill_destination}" ]]; } && \
-        ! diff -qr "${skill_source}" "${skill_destination}"
-    then
+    if { [[ -e "${skill_destination}" ]] || [[ -L "${skill_destination}" ]]; } &&
+        ! diff -qr "${skill_source}" "${skill_destination}"; then
         read -rp "Overwrite ${skill_destination} ? [y/N]: " yn
         case "${yn}" in
-            [yY])
-                echo "ok"
-                ;;
-            *)
-                echo "continue"
-                continue
+        [yY])
+            echo "ok"
+            ;;
+        *)
+            echo "continue"
+            continue
+            ;;
         esac
     fi
 
@@ -104,12 +103,13 @@ NVIM_PLUG_PATH="${XDG_DATA_HOME:-${HOME}/.local/share}/nvim/site/autoload/plug.v
 if [[ ! -e "${VIM_PLUG_PATH}" || ! -e "${NVIM_PLUG_PATH}" ]]; then
     read -rp "Install plug.vim? [y/N]: " yn
     case "${yn}" in
-        [yY])
-            ./install_plug.vim.sh
-            echo "Installed"
-            ;;
-        *)
-            echo "Not installed"
+    [yY])
+        ./install_plug.vim.sh
+        echo "Installed"
+        ;;
+    *)
+        echo "Not installed"
+        ;;
     esac
 fi
 
@@ -117,16 +117,17 @@ fi
 if [[ ! -e "${VIMRC_EXT}" ]]; then
     read -rp "Is this remote? (vim colorscheme setting) [y/n]: " yn
     case "${yn}" in
-        [yY])
-            cat <<-EOF >> "${VIMRC_EXT}"
+    [yY])
+        cat <<-EOF >>"${VIMRC_EXT}"
 set background=light
 EOF
-            ;;
-        [nN])
-            touch "${VIMRC_EXT}"
-            ;;
-        *)
-            echo "abort"
-            exit 1
+        ;;
+    [nN])
+        touch "${VIMRC_EXT}"
+        ;;
+    *)
+        echo "abort"
+        exit 1
+        ;;
     esac
 fi
