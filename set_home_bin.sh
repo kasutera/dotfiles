@@ -32,7 +32,7 @@ fi
 echo "Found diff-highlight at: ${DIFF_HIGHLIGHT_PATH}"
 
 # Create wrapper script with found path
-cat > ~/bin/diff-highlight << EOF
+cat >~/bin/diff-highlight <<EOF
 #!/usr/bin/env bash
 exec "${DIFF_HIGHLIGHT_PATH}" "\$@"
 EOF

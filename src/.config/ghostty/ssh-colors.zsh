@@ -11,9 +11,9 @@ typeset -g _GHOSTTY_SSH_COLORS_LOADED=1
 # Hosts listed here are treated as local and keep the normal Ghostty theme.
 # Put private hostnames in ~/.config/ghostty/ssh-colors.local.zsh.
 typeset -ga GHOSTTY_SSH_LOCAL_HOSTS=(
-  localhost
-  127.0.0.1
-  ::1
+    localhost
+    127.0.0.1
+    ::1
 )
 
 typeset -g GHOSTTY_SSH_REMOTE_BACKGROUND="#fdf6e3"
@@ -26,115 +26,115 @@ _ghostty_ssh_colors_local="${GHOSTTY_SSH_COLORS_LOCAL:-${HOME}/.config/ghostty/s
 unset _ghostty_ssh_colors_local
 
 _ghostty_ssh_color_host() {
-  local arg skip_next=0
+    local arg skip_next=0
 
-  for arg in "$@"; do
-    if (( skip_next )); then
-      skip_next=0
-      continue
-    fi
+    for arg in "$@"; do
+        if ((skip_next)); then
+            skip_next=0
+            continue
+        fi
 
-    case "$arg" in
-      --)
-        continue
-        ;;
-      -[bcDEeFIiJLlmOopQRSWw])
-        skip_next=1
-        ;;
-      -*)
-        ;;
-      *@*)
-        print -r -- "${arg#*@}"
-        return
-        ;;
-      *)
-        print -r -- "$arg"
-        return
-        ;;
-    esac
-  done
+        case "$arg" in
+        --)
+            continue
+            ;;
+        -[bcDEeFIiJLlmOopQRSWw])
+            skip_next=1
+            ;;
+        -*)
+            ;;
+        *@*)
+            print -r -- "${arg#*@}"
+            return
+            ;;
+        *)
+            print -r -- "$arg"
+            return
+            ;;
+        esac
+    done
 }
 
 _ghostty_ssh_is_local_host() {
-  local host="$1"
-  local short="${host%%.*}"
-  local local_host local_short
+    local host="$1"
+    local short="${host%%.*}"
+    local local_host local_short
 
-  for local_host in "${GHOSTTY_SSH_LOCAL_HOSTS[@]}"; do
-    local_short="${local_host%%.*}"
-    [[ "$host" == "$local_host" || "$short" == "$local_short" ]] && return 0
-  done
+    for local_host in "${GHOSTTY_SSH_LOCAL_HOSTS[@]}"; do
+        local_short="${local_host%%.*}"
+        [[ "$host" == "$local_host" || "$short" == "$local_short" ]] && return 0
+    done
 
-  return 1
+    return 1
 }
 
 _ghostty_ssh_color_printf() {
-  if [[ -w /dev/tty ]]; then
-    printf "$@" > /dev/tty
-  else
-    printf "$@"
-  fi
+    if [[ -w /dev/tty ]]; then
+        printf "$@" >/dev/tty
+    else
+        printf "$@"
+    fi
 }
 
 _ghostty_ssh_color_apply() {
-  local host="$1"
-  local short="${host%%.*}"
+    local host="$1"
+    local short="${host%%.*}"
 
-  _ghostty_ssh_color_printf "\033]10;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_FOREGROUND"
-  _ghostty_ssh_color_printf "\033]11;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_BACKGROUND"
-  _ghostty_ssh_color_printf "\033]12;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_CURSOR"
-  _ghostty_ssh_color_printf "\033]2;ssh: %s\033\\\\" "$short"
+    _ghostty_ssh_color_printf "\033]10;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_FOREGROUND"
+    _ghostty_ssh_color_printf "\033]11;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_BACKGROUND"
+    _ghostty_ssh_color_printf "\033]12;%s\033\\\\" "$GHOSTTY_SSH_REMOTE_CURSOR"
+    _ghostty_ssh_color_printf "\033]2;ssh: %s\033\\\\" "$short"
 }
 
 _ghostty_ssh_color_reset() {
-  _ghostty_ssh_color_printf "\033]110\033\\\\"
-  _ghostty_ssh_color_printf "\033]111\033\\\\"
-  _ghostty_ssh_color_printf "\033]112\033\\\\"
-  _ghostty_ssh_color_printf "\033]2;%s\033\\\\" "${PWD/#$HOME/~}"
+    _ghostty_ssh_color_printf "\033]110\033\\\\"
+    _ghostty_ssh_color_printf "\033]111\033\\\\"
+    _ghostty_ssh_color_printf "\033]112\033\\\\"
+    _ghostty_ssh_color_printf "\033]2;%s\033\\\\" "${PWD/#$HOME/~}"
 }
 
 ghostty-ssh-color-test() {
-  _ghostty_ssh_color_apply "${1:-example-remote}"
+    _ghostty_ssh_color_apply "${1:-example-remote}"
 }
 
 ghostty-ssh-color-reset() {
-  _ghostty_ssh_color_reset
+    _ghostty_ssh_color_reset
 }
 
-if (( $+functions[_ghostty_ssh_color_original_ssh] )) &&
-  [[ "$(functions _ghostty_ssh_color_original_ssh)" == *"_ghostty_ssh_color_apply"* ]]; then
-  unfunction _ghostty_ssh_color_original_ssh
+if (($+functions[_ghostty_ssh_color_original_ssh])) &&
+    [[ "$(functions _ghostty_ssh_color_original_ssh)" == *"_ghostty_ssh_color_apply"* ]]; then
+    unfunction _ghostty_ssh_color_original_ssh
 fi
 
-if (( ! $+functions[_ghostty_ssh_color_original_ssh] )); then
-  if (( $+functions[ssh] )) && [[ "$(functions ssh)" != *"_ghostty_ssh_color_apply"* ]]; then
-    functions -c ssh _ghostty_ssh_color_original_ssh
-  else
-    _ghostty_ssh_color_original_ssh() {
-      command ssh "$@"
-    }
-  fi
+if ((!$+functions[_ghostty_ssh_color_original_ssh])); then
+    if (($+functions[ssh])) && [[ "$(functions ssh)" != *"_ghostty_ssh_color_apply"* ]]; then
+        functions -c ssh _ghostty_ssh_color_original_ssh
+    else
+        _ghostty_ssh_color_original_ssh() {
+            command ssh "$@"
+        }
+    fi
 fi
 
 ssh() {
-  setopt local_options no_bg_nice
+    setopt local_options no_bg_nice
 
-  local host ret
-  host="$(_ghostty_ssh_color_host "$@")"
+    local host ret
+    host="$(_ghostty_ssh_color_host "$@")"
 
-  if [[ -n "$host" ]] && ! _ghostty_ssh_is_local_host "$host"; then
-    _ghostty_ssh_color_apply "$host"
-    if [[ -n "${GHOSTTY_SSH_COLOR_DEBUG:-}" ]]; then
-      print -ru2 -- "ghostty-ssh-colors: apply host=${host}"
+    if [[ -n "$host" ]] && ! _ghostty_ssh_is_local_host "$host"; then
+        _ghostty_ssh_color_apply "$host"
+        if [[ -n "${GHOSTTY_SSH_COLOR_DEBUG:-}" ]]; then
+            print -ru2 -- "ghostty-ssh-colors: apply host=${host}"
+        fi
+    elif [[ -n "$host" && -n "${GHOSTTY_SSH_COLOR_DEBUG:-}" ]]; then
+        print -ru2 -- "ghostty-ssh-colors: keep default theme for local host=${host}"
     fi
-  elif [[ -n "$host" && -n "${GHOSTTY_SSH_COLOR_DEBUG:-}" ]]; then
-    print -ru2 -- "ghostty-ssh-colors: keep default theme for local host=${host}"
-  fi
 
-  _ghostty_ssh_color_original_ssh "$@"
-  ret=$?
+    _ghostty_ssh_color_original_ssh "$@"
+    ret=$?
 
-  [[ -n "$host" ]] && ! _ghostty_ssh_is_local_host "$host" && _ghostty_ssh_color_reset
+    [[ -n "$host" ]] && ! _ghostty_ssh_is_local_host "$host" && _ghostty_ssh_color_reset
 
-  return "$ret"
+    return "$ret"
 }

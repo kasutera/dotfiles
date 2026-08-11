@@ -17,3 +17,20 @@ repos:
       - id: shellcheck
         files: \.(sh|bash|zsh)$
         exclude: \.p10k\.zsh$
+
+  # shfmt - シェルスクリプト整形
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.13.1-1
+    hooks:
+      - id: shfmt
+        args: [--write, --indent, "4"]
+        exclude: \.(p10k\.zsh|zshrc)$
+
+  # Luacheck - Lua 静的解析
+  - repo: local
+    hooks:
+      - id: luacheck
+        name: Luacheck
+        entry: luacheck --config .luacheckrc
+        language: system
+        types: [lua]

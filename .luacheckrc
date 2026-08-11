@@ -1,4 +1,9 @@
 -- Hammerspoon globals
 globals = {
-    "hs"
+    "hs",
+    "appsWatcher",
+    "layer5Watcher",
+    "overrideRightMouseDown",
+    "overrideRightMouseUp",
+    "dragRightToScroll"
 }
