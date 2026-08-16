@@ -41,9 +41,6 @@ for m in visual viopp; do
   done
 done
 
-# braking line by ^J on command line
-bindkey '^J' self-insert
-
 # esc lag
 KEYTIMEOUT=1
 
