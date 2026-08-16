@@ -120,14 +120,6 @@ alias pbtee='tee >(pbcopy)'
 alias tig='tig --all'
 alias :q='exit'
 
-function mmake () {
-    if [ -e "Makefile" ]; then
-        make $@
-    elif [ -e "OMakefile" ]; then
-        omake $@
-    fi
-}
-
 alias -s {png,jpg,bmp,tif,tiff,PNG,JPG,BMP,TIF,TIFF}=open
 
 # ############################################################# #
