@@ -18,6 +18,11 @@ if ! type git >/dev/null; then
     exit 1
 fi
 
+# shellcheck source=skill-functions.sh
+source "${PWD}/skill-functions.sh"
+
+validate_skill_destinations
+
 git submodule init
 git submodule update
 
@@ -28,8 +33,7 @@ mkdir -p \
     ~/.config/ghostty/ \
     ~/.config/git/ \
     ~/.hammerspoon/ \
-    ~/.codex/rules/ \
-    ~/.agents/skills/
+    ~/.codex/rules/
 
 for filename in \
     .vimrc \
@@ -59,35 +63,7 @@ for filename in \
     ln -sf "${PWD}/src/${filename}" "${HOME}/${filename}"
 done
 
-for skill_source in "${PWD}"/src/.agents/skills/*; do
-    if [[ ! -d "${skill_source}" ]]; then
-        continue
-    fi
-
-    skill_name="${skill_source##*/}"
-    skill_destination="${HOME}/.agents/skills/${skill_name}"
-
-    if { [[ -e "${skill_destination}" ]] || [[ -L "${skill_destination}" ]]; } &&
-        ! diff -qr "${skill_source}" "${skill_destination}"; then
-        read -rp "Overwrite ${skill_destination} ? [y/N]: " yn
-        case "${yn}" in
-        [yY])
-            echo "ok"
-            ;;
-        *)
-            echo "continue"
-            continue
-            ;;
-        esac
-    fi
-
-    if [[ -L "${skill_destination}" ]]; then
-        unlink "${skill_destination}"
-    elif [[ -e "${skill_destination}" ]]; then
-        rm -rf "${skill_destination}"
-    fi
-    ln -s "${skill_source}" "${skill_destination}"
-done
+install_skills
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
 

@@ -1,14 +1,72 @@
-# Codex user skills
+# User skills
 
-User skills are maintained under `src/.agents/skills/<skill-name>/` and installed
-under `~/.agents/skills/` by `config.sh`.
+Skill sources are maintained under `src/.agents/skills/<skill-name>/`. Their home
+installation destinations are listed in
+`src/.agents/skill-destinations.sh` and processed by `config.sh`.
 
-`config.sh` creates one symbolic link per skill directory. For example:
+The validation and symlink functions live in the repository root's
+`skill-functions.sh`; normally, adding a skill only requires editing the
+configuration, not the installer code.
+
+The configuration is a Bash file containing one `skill` call per destination:
+
+```bash
+skill <skill-name> <relative-path-under-$HOME>
+```
+
+The installer creates one directory-level symbolic link for each call. For
+example:
+
+```bash
+skill gh-run-safely .agents/skills
+```
 
 ```text
 ~/.agents/skills/gh-run-safely
   -> ~/dotfiles/src/.agents/skills/gh-run-safely
 ```
+
+The same skill can have multiple destinations by adding multiple calls:
+
+```bash
+skill example-skill .agents/skills
+skill example-skill .claude/skills
+```
+
+The destination must be one of these paths relative to `$HOME`:
+
+- `.agents/skills`
+- `.claude/skills`
+
+`skill-functions.sh` rejects every other destination before installation.
+
+The configuration selects filesystem destinations, not agents. It cannot prevent
+another agent from discovering a skill placed in a directory that agent scans.
+
+`config.sh` sources the configuration first in validation mode and then in
+installation mode, so all entries are checked before any files change. It
+rejects missing `SKILL.md` files, unlisted skill directories, malformed skill
+names, and invalid destinations. Every skill added under `src/.agents/skills/`
+therefore needs at least one `skill` call.
+
+## Adding a skill
+
+1. Create `src/.agents/skills/<skill-name>/SKILL.md`. The directory name and the
+   frontmatter `name` must use the same lowercase hyphenated skill name.
+2. Add one or more `skill` calls to `src/.agents/skill-destinations.sh`.
+3. Check the installer before running it:
+
+   ```sh
+   bash -n config.sh
+   git diff --check
+   ```
+
+4. Run `./config.sh`. It creates or updates one directory-level link per
+   `skill` call.
+
+This file is a dotfiles installer configuration, not part of the Agent
+Skills standard. Keep it outside the skill directories so the skill packages
+remain portable.
 
 Do not create symbolic links for individual files such as `SKILL.md` or
 `agents/openai.yaml`. The official documentation states that Codex supports
