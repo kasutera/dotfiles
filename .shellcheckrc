@@ -1,0 +1,3 @@
+# `source=` ディレクティブを実際に追跡させる。これが無いと config.sh 単体を
+# shellcheck に渡したときに skill-functions.sh を追えず SC1091 になる。
+external-sources=true

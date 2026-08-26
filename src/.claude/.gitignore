@@ -1,0 +1,10 @@
+# ~/.claude/ には会話ログ (history.jsonl, sessions/, projects/) や
+# 揮発的な状態が同居する。取り込むファイルを明示した allowlist にしておく。
+*
+!.gitignore
+!CLAUDE.md
+!settings.json
+!statusline-command.sh
+!hooks/
+hooks/*
+!hooks/herdr-clear-metadata.sh

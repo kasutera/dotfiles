@@ -21,6 +21,35 @@ fi
 # shellcheck source=skill-functions.sh
 source "${PWD}/skill-functions.sh"
 
+CLAUDE_SETTINGS="${HOME}/.claude/settings.json"
+
+# ~/.claude/settings.json は Claude Code 自身が実行中に書き換えるので symlink
+# にできない。宣言的に管理したいキーだけを src/.claude/settings.json に置き、
+# jq の再帰マージで流し込む。競合キーは repo 側が勝ち、theme や model のような
+# ローカル固有のキーは保持される。
+merge_claude_settings() {
+    local repo="${PWD}/src/.claude/settings.json"
+    local tmp
+
+    if ! type jq >/dev/null 2>&1; then
+        echo "WARNING: jq not found; skipped merging ${repo}" >&2
+        return
+    fi
+
+    if [[ ! -s "${CLAUDE_SETTINGS}" ]]; then
+        echo '{}' >"${CLAUDE_SETTINGS}"
+    fi
+
+    tmp="$(mktemp)"
+    if jq -s '.[0] * .[1]' "${CLAUDE_SETTINGS}" "${repo}" >"${tmp}"; then
+        mv "${tmp}" "${CLAUDE_SETTINGS}"
+    else
+        rm -f "${tmp}"
+        echo "ERROR: Failed to merge ${repo} into ${CLAUDE_SETTINGS}" >&2
+        exit 1
+    fi
+}
+
 validate_skill_destinations
 
 git submodule init
@@ -33,7 +62,7 @@ mkdir -p \
     ~/.config/ghostty/ \
     ~/.config/git/ \
     ~/.config/herdr/ \
-    ~/.claude/ \
+    ~/.claude/hooks/ \
     ~/.hammerspoon/ \
     ~/.codex/rules/
 
@@ -49,6 +78,8 @@ for filename in \
     .config/git/config \
     .config/herdr/config.toml \
     .claude/CLAUDE.md \
+    .claude/hooks/herdr-clear-metadata.sh \
+    .claude/statusline-command.sh \
     .p10k.zsh \
     .hammerspoon/init.lua \
     .codex/rules/gh.rules; do
@@ -68,6 +99,8 @@ for filename in \
 done
 
 install_skills
+
+merge_claude_settings
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
 
