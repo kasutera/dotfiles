@@ -1,0 +1,5 @@
+# herdr のランタイム状態を誤ってコミットしないための allowlist。
+# session.json には作業中リポジトリの絶対パスが入るので特に注意。
+*
+!.gitignore
+!config.toml

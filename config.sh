@@ -32,6 +32,8 @@ mkdir -p \
     ~/.config/nvim/ \
     ~/.config/ghostty/ \
     ~/.config/git/ \
+    ~/.config/herdr/ \
+    ~/.claude/ \
     ~/.hammerspoon/ \
     ~/.codex/rules/
 
@@ -45,6 +47,8 @@ for filename in \
     .config/ghostty/config \
     .config/ghostty/ssh-colors.zsh \
     .config/git/config \
+    .config/herdr/config.toml \
+    .claude/CLAUDE.md \
     .p10k.zsh \
     .hammerspoon/init.lua \
     .codex/rules/gh.rules; do

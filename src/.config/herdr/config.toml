@@ -1,0 +1,17 @@
+onboarding = false
+
+[ui]
+agent_panel_sort = "priority"
+
+[ui.toast]
+delivery = "system"
+
+[ui.sidebar.agents.rows_by_agent]
+claude = [
+  [
+    "state_icon",
+    { token = "workspace", fg = "#89b4fa", bold = true },
+    { token = "tab", fg = "#a6adc8" }
+  ],
+  [{ token = "$summary", fg = "#a6e3a1" }]
+]
