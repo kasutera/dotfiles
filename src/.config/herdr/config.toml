@@ -15,3 +15,11 @@ claude = [
   ],
   [{ token = "$summary", fg = "#a6e3a1" }]
 ]
+codex = [
+  [
+    "state_icon",
+    { token = "workspace", fg = "#89b4fa", bold = true },
+    { token = "tab", fg = "#a6adc8" }
+  ],
+  [{ token = "$summary", fg = "#a6e3a1" }]
+]

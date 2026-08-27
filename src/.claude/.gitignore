@@ -5,6 +5,3 @@
 !CLAUDE.md
 !settings.json
 !statusline-command.sh
-!hooks/
-hooks/*
-!hooks/herdr-clear-metadata.sh

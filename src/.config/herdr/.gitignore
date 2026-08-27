@@ -3,3 +3,4 @@
 *
 !.gitignore
 !config.toml
+!clear-agent-metadata.sh

@@ -1,0 +1,9 @@
+# ~/.codex/ には会話ログ (history.jsonl, sessions/)、認証情報 (auth.json)、
+# 絶対パスと社内リポジトリ名だらけの config.toml が同居する。
+# config.toml は Codex 自身が書き換えるうえ公開に適さないので取り込まない。
+*
+!.gitignore
+!AGENTS.md
+!hooks.json
+!rules/
+!rules/*.rules

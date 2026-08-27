@@ -22,11 +22,37 @@ fi
 source "${PWD}/skill-functions.sh"
 
 CLAUDE_SETTINGS="${HOME}/.claude/settings.json"
+CODEX_HOOKS="${HOME}/.codex/hooks.json"
 
 # ~/.claude/settings.json は Claude Code 自身が実行中に書き換えるので symlink
 # にできない。宣言的に管理したいキーだけを src/.claude/settings.json に置き、
 # jq の再帰マージで流し込む。競合キーは repo 側が勝ち、theme や model のような
 # ローカル固有のキーは保持される。
+# Codex の hooks.json も herdr integration install が書き換えるので、同じく
+# jq の再帰マージで宣言的な部分だけを流し込む。
+merge_codex_hooks() {
+    local repo="${PWD}/src/.codex/hooks.json"
+    local tmp
+
+    if ! type jq >/dev/null 2>&1; then
+        echo "WARNING: jq not found; skipped merging ${repo}" >&2
+        return
+    fi
+
+    if [[ ! -s "${CODEX_HOOKS}" ]]; then
+        echo '{}' >"${CODEX_HOOKS}"
+    fi
+
+    tmp="$(mktemp)"
+    if jq -s '.[0] * .[1]' "${CODEX_HOOKS}" "${repo}" >"${tmp}"; then
+        mv "${tmp}" "${CODEX_HOOKS}"
+    else
+        rm -f "${tmp}"
+        echo "ERROR: Failed to merge ${repo} into ${CODEX_HOOKS}" >&2
+        exit 1
+    fi
+}
+
 merge_claude_settings() {
     local repo="${PWD}/src/.claude/settings.json"
     local tmp
@@ -78,10 +104,10 @@ for filename in \
     .config/git/config \
     .config/herdr/config.toml \
     .claude/CLAUDE.md \
-    .claude/hooks/herdr-clear-metadata.sh \
     .claude/statusline-command.sh \
     .p10k.zsh \
     .hammerspoon/init.lua \
+    .codex/AGENTS.md \
     .codex/rules/gh.rules; do
     if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"; then
         read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
@@ -101,6 +127,12 @@ done
 install_skills
 
 merge_claude_settings
+merge_codex_hooks
+
+# herdr のメタデータクリアは claude / codex 共通のスクリプト。それぞれの
+# エージェントが hook を探す場所に同じ実体を張る。
+ln -sf "${PWD}/src/.config/herdr/clear-agent-metadata.sh" ~/.claude/hooks/herdr-clear-metadata.sh
+ln -sf "${PWD}/src/.config/herdr/clear-agent-metadata.sh" ~/.codex/herdr-clear-metadata.sh
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
 
