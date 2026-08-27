@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deliverable Quality"
+  short_description: "Revise from the artifact, not from the conversation"
+  default_prompt: "Use $deliverable-quality to revise this so it reads as one deliberate piece."
