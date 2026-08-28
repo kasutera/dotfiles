@@ -13,6 +13,7 @@ MAGENTA='\033[95m'
 YELLOW='\033[33m'
 WHITE='\033[37m'
 GREEN='\033[92m'
+DIM='\033[90m'
 RESET='\033[0m'
 
 # Format a unix epoch as local time. Handles both BSD date (-r) and GNU
@@ -63,6 +64,7 @@ fi
 model=$(echo "$input" | jq -r '.model.display_name')
 effort=$(echo "$input" | jq -r '.effort.level')
 used=$(echo "$input" | jq -r '.context_window.used_percentage')
+session_id=$(echo "$input" | jq -r '.session_id // empty')
 
 bar_width=10
 filled=$(awk -v u="$used" -v w="$bar_width" 'BEGIN{v=int((u/100)*w+0.5); if(v<0)v=0; if(v>w)v=w; print v}')
@@ -76,6 +78,9 @@ used_rounded=$(awk -v u="$used" 'BEGIN{printf "%.0f", u}')
 
 line2=$(printf "${WHITE}[%s] %s%%${RESET} ${YELLOW}%s${RESET} ${GREEN}(%s)${RESET}" \
     "$bar" "$used_rounded" "$model" "$effort")
+if [ -n "$session_id" ]; then
+    line2="${line2}$(printf " ${DIM}%s${RESET}" "$session_id")"
+fi
 
 # --- Line 3: 5h / 7d rate limits ---
 five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
