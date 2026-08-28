@@ -3,5 +3,6 @@
 *
 !.gitignore
 !CLAUDE.md
+!keybindings.json
 !settings.json
 !statusline-command.sh

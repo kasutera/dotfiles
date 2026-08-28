@@ -51,6 +51,7 @@ for filename in \
     .config/git/config \
     .config/herdr/config.toml \
     .claude/CLAUDE.md \
+    .claude/keybindings.json \
     .claude/statusline-command.sh \
     .p10k.zsh \
     .hammerspoon/init.lua \
