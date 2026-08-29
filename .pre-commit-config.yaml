@@ -10,6 +10,18 @@ repos:
       - id: check-merge-conflict
       - id: mixed-line-ending
 
+  # actionlint - GitHub Actionsワークフロー解析
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+
+  # yamllint - YAMLスタイル・静的解析
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+
   # ShellCheck - シェルスクリプト解析
   - repo: https://github.com/ryanrhee/shellcheck-py
     rev: v0.11.0.1
@@ -25,6 +37,12 @@ repos:
       - id: shfmt
         args: [--write, --indent, "4"]
         exclude: \.(p10k\.zsh|zshrc)$
+
+  # Taplo - TOML整形
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: taplo-format
 
   # Luacheck - Lua 静的解析
   - repo: local
