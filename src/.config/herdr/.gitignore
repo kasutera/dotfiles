@@ -2,5 +2,9 @@
 # session.json には作業中リポジトリの絶対パスが入るので特に注意。
 *
 !.gitignore
+!AGENTS.md
+!CLAUDE.md
+!claude-settings.json
+!codex-hooks.json
 !config.toml
 !clear-agent-metadata.sh

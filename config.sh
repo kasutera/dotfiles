@@ -22,6 +22,8 @@ fi
 source "${PWD}/skill-functions.sh"
 # shellcheck source=agent-config-functions.sh
 source "${PWD}/agent-config-functions.sh"
+# shellcheck source=herdr-functions.sh
+source "${PWD}/herdr-functions.sh"
 
 validate_skill_destinations
 
@@ -49,32 +51,32 @@ for filename in \
     .config/ghostty/config \
     .config/ghostty/ssh-colors.zsh \
     .config/git/config \
-    .config/herdr/config.toml \
-    .claude/CLAUDE.md \
     .claude/keybindings.json \
     .claude/statusline-command.sh \
     .p10k.zsh \
     .hammerspoon/init.lua \
-    .codex/AGENTS.md \
     .codex/rules/gh.rules; do
-    if [[ -e "${HOME}/${filename}" ]] && ! diff "${PWD}/src/${filename}" "${HOME}/${filename}"; then
-        read -rp "Overwrite ${HOME}/${filename} ? [y/N]: " yn
-        case "${yn}" in
-        [yY])
-            echo "ok"
-            ;;
-        *)
-            echo "continue"
-            continue
-            ;;
-        esac
-    fi
-    ln -sf "${PWD}/src/${filename}" "${HOME}/${filename}"
+    install_agent_file "src/${filename}" "${HOME}/${filename}"
 done
 
 install_skills
 
+# Herdr integration が設定を更新するため、dotfiles の一般設定をマージする
+# 前に integration をインストールする。Herdr が無い環境では一般設定だけを
+# 続行する。
+if type herdr >/dev/null 2>&1; then
+    install_herdr_integrations
+    HERDR_AVAILABLE=1
+else
+    echo "WARNING: herdr not found; skipped Herdr integration/configuration" >&2
+    HERDR_AVAILABLE=0
+fi
+
 install_agent_configs
+
+if ((HERDR_AVAILABLE)); then
+    install_herdr_agent_configs
+fi
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
 

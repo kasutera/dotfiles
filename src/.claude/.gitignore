@@ -2,7 +2,6 @@
 # 揮発的な状態が同居する。取り込むファイルを明示した allowlist にしておく。
 *
 !.gitignore
-!CLAUDE.md
 !keybindings.json
 !settings.json
 !statusline-command.sh

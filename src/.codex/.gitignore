@@ -3,7 +3,5 @@
 # config.toml は Codex 自身が書き換えるうえ公開に適さないので取り込まない。
 *
 !.gitignore
-!AGENTS.md
-!hooks.json
 !rules/
 !rules/*.rules
