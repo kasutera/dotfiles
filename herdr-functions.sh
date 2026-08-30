@@ -7,6 +7,7 @@ HERDR_CODEX_HOOKS="${HERDR_CONFIG_DIR}/codex-hooks.json"
 HERDR_CLEAR_SCRIPT="${HERDR_CONFIG_DIR}/clear-agent-metadata.sh"
 HERDR_CLAUDE_GUIDANCE="${HERDR_CONFIG_DIR}/CLAUDE.md"
 HERDR_CODEX_GUIDANCE="${HERDR_CONFIG_DIR}/AGENTS.md"
+HERDR_CODEX_RULE="src/.codex/rules/herdr.rules"
 
 herdr_config_error() {
     echo "ERROR: $*" >&2
@@ -25,6 +26,7 @@ install_herdr_agent_configs() {
     install_agent_file "${HERDR_CLAUDE_GUIDANCE}" "${HOME}/.claude/CLAUDE.md"
     install_agent_file "${HERDR_CODEX_GUIDANCE}" "${HOME}/.codex/AGENTS.md"
     install_agent_file "${HERDR_CONFIG_DIR}/config.toml" "${HOME}/.config/herdr/config.toml"
+    install_agent_file "${HERDR_CODEX_RULE}" "${HOME}/.codex/rules/herdr.rules"
 
     [[ -f "${PWD}/${HERDR_CLEAR_SCRIPT}" ]] ||
         herdr_config_error "Missing ${PWD}/${HERDR_CLEAR_SCRIPT}"

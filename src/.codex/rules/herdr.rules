@@ -1,0 +1,11 @@
+# ============================================================================
+# DISPLAY-ONLY — allow
+# ============================================================================
+
+# `report-metadata` updates pane presentation metadata only. Keep this prefix
+# narrower than `herdr pane` so pane-control commands remain subject to approval.
+prefix_rule(
+    pattern = ["herdr", "pane", "report-metadata"],
+    decision = "allow",
+    justification = "Updates only Herdr display metadata; it does not control panes or agent state.",
+)
