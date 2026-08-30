@@ -101,6 +101,72 @@ preexec_cursor() {
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec preexec_cursor
 
+# Notify when a foreground command takes a long time.
+typeset -gF TERMINAL_NOTIFIER_THRESHOLD=10
+typeset -ga TERMINAL_NOTIFIER_BLACKLIST=(
+    codex
+    claude
+    clade
+    herdr
+    brew
+    tig
+    vim
+    nvim
+    less
+    bat
+    top
+    watch
+    ssh
+    tail
+)
+typeset -gF _terminal_notifier_started_at=0
+typeset -g _terminal_notifier_command=
+
+_terminal_notifier_is_blacklisted() {
+    local -a command_words
+    command_words=("${(@z)1}")
+    local command_name=${command_words[1]:-}
+    local blacklisted_command
+
+    for blacklisted_command in "${TERMINAL_NOTIFIER_BLACKLIST[@]}"; do
+        [[ "$command_name" == "$blacklisted_command" ]] && return 0
+    done
+    return 1
+}
+
+_terminal_notifier_preexec() {
+    _terminal_notifier_started_at=$EPOCHREALTIME
+    _terminal_notifier_command=$1
+}
+
+_terminal_notifier_precmd() {
+    local exit_status=$?
+    local -F elapsed=$((EPOCHREALTIME - _terminal_notifier_started_at))
+
+    if (( _terminal_notifier_started_at > 0 &&
+          elapsed >= TERMINAL_NOTIFIER_THRESHOLD )) &&
+       ! _terminal_notifier_is_blacklisted "$_terminal_notifier_command" &&
+       (( $+commands[terminal-notifier] )); then
+        local -a command_words
+        command_words=("${(@z)_terminal_notifier_command}")
+        local command_name=${command_words[1]:-command}
+
+        command terminal-notifier \
+            -title 'Command finished' \
+            -subtitle "cmd: ${command_name}" \
+            -message "完了: ${elapsed}s (exit ${exit_status})" \
+            -sound default \
+            -activate com.mitchellh.ghostty >/dev/null 2>&1
+    fi
+
+    _terminal_notifier_started_at=0
+    _terminal_notifier_command=
+    return "$exit_status"
+}
+
+add-zsh-hook preexec _terminal_notifier_preexec
+add-zsh-hook precmd _terminal_notifier_precmd
+
 # ############################################################# #
 # alias                                                         #
 # ############################################################# #
