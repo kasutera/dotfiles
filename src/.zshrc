@@ -121,15 +121,24 @@ typeset -ga TERMINAL_NOTIFIER_BLACKLIST=(
 )
 typeset -gF _terminal_notifier_started_at=0
 typeset -g _terminal_notifier_command=
+typeset -g _terminal_notifier_command_full=
 
+# Match zsh-auto-notify's ignore semantics: inspect the final pipeline segment,
+# remove one leading sudo, and use prefix matching for blacklist entries.
 _terminal_notifier_is_blacklisted() {
-    local -a command_words
-    command_words=("${(@z)1}")
-    local command_name=${command_words[1]:-}
+    local -a command_list
+    command_list=("${(@s/|/)1}")
+    local target_command="${command_list[-1]}"
+    target_command="${target_command#"${target_command%%[![:space:]]*}"}"
+
+    if [[ "$target_command" == "sudo "* ]]; then
+        target_command="${target_command#sudo }"
+    fi
+
     local blacklisted_command
 
     for blacklisted_command in "${TERMINAL_NOTIFIER_BLACKLIST[@]}"; do
-        [[ "$command_name" == "$blacklisted_command" ]] && return 0
+        [[ "$target_command" == "${blacklisted_command}"* ]] && return 0
     done
     return 1
 }
@@ -137,6 +146,7 @@ _terminal_notifier_is_blacklisted() {
 _terminal_notifier_preexec() {
     _terminal_notifier_started_at=$EPOCHREALTIME
     _terminal_notifier_command=$1
+    _terminal_notifier_command_full=${3:-$2}
 }
 
 _terminal_notifier_precmd() {
@@ -145,7 +155,7 @@ _terminal_notifier_precmd() {
 
     if (( _terminal_notifier_started_at > 0 &&
           elapsed >= TERMINAL_NOTIFIER_THRESHOLD )) &&
-       ! _terminal_notifier_is_blacklisted "$_terminal_notifier_command" &&
+       ! _terminal_notifier_is_blacklisted "$_terminal_notifier_command_full" &&
        (( $+commands[terminal-notifier] )); then
         local -a command_words
         command_words=("${(@z)_terminal_notifier_command}")
@@ -161,6 +171,7 @@ _terminal_notifier_precmd() {
 
     _terminal_notifier_started_at=0
     _terminal_notifier_command=
+    _terminal_notifier_command_full=
     return "$exit_status"
 }
 
