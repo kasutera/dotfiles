@@ -118,6 +118,7 @@ typeset -ga TERMINAL_NOTIFIER_BLACKLIST=(
     watch
     ssh
     tail
+    caffeinate
 )
 typeset -gF _terminal_notifier_started_at=0
 typeset -g _terminal_notifier_command=
