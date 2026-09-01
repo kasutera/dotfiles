@@ -1,11 +1,8 @@
 # Ghostty configuration generated from iterm_profiles.json.
 
 # Font
-font-family = Iosevka Term
-font-style = Extended
-font-style-bold = Bold Extended
-font-style-italic = Extended Italic
-font-style-bold-italic = Bold Extended Italic
+font-family = Iosevka Term Extended
+font-family = Sarasa Term J
 font-size = 15
 font-synthetic-style = true
 
