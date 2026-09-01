@@ -2,6 +2,8 @@
 set -e
 
 VIMRC_EXT=~/.vimrc_ext
+# ホスト種別の判定を残すローカルファイル。.gitignore 済み。
+IS_REMOTE_FILE=.is_remote
 
 if [[ "$0" != ./config.sh ]]; then
     echo "ERROR: Please run this with ./config.sh" >&2
@@ -26,6 +28,30 @@ source "${PWD}/agent-config-functions.sh"
 source "${PWD}/herdr-functions.sh"
 
 validate_skill_destinations
+
+# ssh 先として使う機かどうかを一度だけ決め、判定をローカルファイルに残す。
+# vim の colorscheme と herdr の allow_nested を、両方ここから導出する。
+if [[ ! -e "${IS_REMOTE_FILE}" ]]; then
+    read -rp "Is this a remote host? (ssh 先として使う機か) [y/n]: " yn
+    case "${yn}" in
+    [yY])
+        echo true >"${IS_REMOTE_FILE}"
+        ;;
+    [nN])
+        echo false >"${IS_REMOTE_FILE}"
+        ;;
+    *)
+        echo "abort"
+        exit 1
+        ;;
+    esac
+fi
+
+IS_REMOTE="$(cat "${IS_REMOTE_FILE}")"
+if [[ "${IS_REMOTE}" != true && "${IS_REMOTE}" != false ]]; then
+    echo "ERROR: ${IS_REMOTE_FILE} must contain 'true' or 'false'" >&2
+    exit 1
+fi
 
 git submodule init
 git submodule update
@@ -75,7 +101,7 @@ fi
 install_agent_configs
 
 if ((HERDR_AVAILABLE)); then
-    install_herdr_agent_configs
+    install_herdr_agent_configs "${IS_REMOTE}"
 fi
 
 ln -sf "${PWD}/src/.vimrc" ~/.config/nvim/init.vim
@@ -102,21 +128,11 @@ if [[ ! -e "${VIM_PLUG_PATH}" || ! -e "${NVIM_PLUG_PATH}" ]]; then
     esac
 fi
 
-# remote / local setting
+# vim colorscheme setting
 if [[ ! -e "${VIMRC_EXT}" ]]; then
-    read -rp "Is this remote? (vim colorscheme setting) [y/n]: " yn
-    case "${yn}" in
-    [yY])
-        cat <<-EOF >>"${VIMRC_EXT}"
-set background=light
-EOF
-        ;;
-    [nN])
+    if [[ "${IS_REMOTE}" == true ]]; then
+        echo "set background=light" >"${VIMRC_EXT}"
+    else
         touch "${VIMRC_EXT}"
-        ;;
-    *)
-        echo "abort"
-        exit 1
-        ;;
-    esac
+    fi
 fi
