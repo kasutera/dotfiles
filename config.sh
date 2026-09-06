@@ -2,7 +2,6 @@
 set -e
 
 VIMRC_EXT=~/.vimrc_ext
-# ホスト種別の判定を残すローカルファイル。.gitignore 済み。
 IS_REMOTE_FILE=.is_remote
 
 if [[ "$0" != ./config.sh ]]; then
@@ -29,10 +28,9 @@ source "${PWD}/herdr-functions.sh"
 
 validate_skill_destinations
 
-# ssh 先として使う機かどうかを一度だけ決め、判定をローカルファイルに残す。
-# vim の colorscheme と herdr の allow_nested を、両方ここから導出する。
+# ssh 先として使うかどうか決め、判定をローカルファイルに残す。
 if [[ ! -e "${IS_REMOTE_FILE}" ]]; then
-    read -rp "Is this a remote host? (ssh 先として使う機か) [y/n]: " yn
+    read -rp "Is this a remote host? [y/n]: " yn
     case "${yn}" in
     [yY])
         echo true >"${IS_REMOTE_FILE}"
