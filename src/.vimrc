@@ -67,6 +67,7 @@ Plug 'bronson/vim-trailing-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
+Plug 'OXY2DEV/markview.nvim'
 " auto parentheses
 " Plug 'cohama/lexima.vim'
 
