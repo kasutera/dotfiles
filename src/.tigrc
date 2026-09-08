@@ -20,9 +20,9 @@ bind main    G      move-last-line
 bind main    <Esc>g :toggle commit-title-graph
 
 # どこでもCでcommit
-bind generic C      !git commit -v
-bind refs    C      !git commit -v
-bind main    C      !git commit -v
+bind generic C      >git commit -v
+bind refs    C      >git commit -v
+bind main    C      >git commit -v
 
 # どこでもPでpush
 bind generic P      !git push
@@ -32,3 +32,6 @@ bind main    P      !git push
 # K で cherry-pick (default: 'C')
 bind main    K      ?git cherry-pick %(commit)
 bind diff    K      ?git cherry-pick %(commit)
+
+# status view で選択中のファイルを Vim で開く
+bind status  e      >vim -- "%(file)"
