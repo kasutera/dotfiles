@@ -21,6 +21,7 @@ bind main    <Esc>g :toggle commit-title-graph
 
 # どこでもCでcommit
 bind generic C      >git commit -v
+bind status  C      >git commit -v
 bind refs    C      >git commit -v
 bind main    C      >git commit -v
 
