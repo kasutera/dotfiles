@@ -42,8 +42,12 @@ appsWatcher:start()
 
 -- torabo-tsuki 向け。 layer5 (マウスモード) のときを判別可能にするため
 -- https://github.com/kasutera/zmk-keyboard-torabo-tsuki-lp/pull/3
-local layer5Menu = hs.menubar.new()
-layer5Menu:setTitle("⚪️")
+-- torabo-tsuki が Bluetooth 接続されているときだけメニューバーに表示する
+local TORABO_TSUKI_NAME = "torabo-tsuki"
+local BLUETOOTH_POLL_INTERVAL = 5
+
+-- 表示 / 非表示を繰り返すので autosaveName を付けてメニューバー内の位置を保たせる
+local layer5Menu = hs.menubar.new(true, "toraboTsukiLayer5")
 
 layer5Watcher = hs.eventtap.new({
    hs.eventtap.event.types.keyDown,
@@ -68,7 +72,75 @@ layer5Watcher = hs.eventtap.new({
 
    return false
 end)
-layer5Watcher:start()
+
+-- 接続状態が変わったときだけメニューバーと eventtap を切り替える
+local layer5Enabled = nil
+local function setLayer5Enabled(enabled)
+   if enabled == layer5Enabled then
+      return
+   end
+   layer5Enabled = enabled
+
+   if enabled then
+      layer5Menu:setTitle("⚪️")
+      layer5Menu:returnToMenuBar()
+      layer5Watcher:start()
+   else
+      layer5Watcher:stop()
+      layer5Menu:removeFromMenuBar()
+   end
+end
+
+-- system_profiler の JSON は { device_connected = { { ["デバイス名"] = {...} }, ... } } という形
+-- なので、接続中デバイスのキーに目的の名前があるか探す
+local function isToraboTsukiConnected(output)
+   local ok, parsed = pcall(hs.json.decode, output)
+   if not ok or type(parsed) ~= "table" then
+      return false
+   end
+
+   for _, block in ipairs(parsed.SPBluetoothDataType or {}) do
+      for _, entry in ipairs(block.device_connected or {}) do
+         for name in pairs(entry) do
+            if name == TORABO_TSUKI_NAME then
+               return true
+            end
+         end
+      end
+   end
+
+   return false
+end
+
+-- system_profiler は 0.2 秒ほどかかるので hs.task で非同期に実行する
+local bluetoothTask = nil
+local function refreshLayer5Menu()
+   if bluetoothTask and bluetoothTask:isRunning() then
+      return
+   end
+
+   bluetoothTask = hs.task.new(
+      "/usr/sbin/system_profiler",
+      function(exitCode, stdOut, _stdErr)
+         setLayer5Enabled(exitCode == 0 and isToraboTsukiConnected(stdOut))
+      end,
+      { "SPBluetoothDataType", "-json" }
+   )
+   bluetoothTask:start()
+end
+
+setLayer5Enabled(false)
+refreshLayer5Menu()
+bluetoothPollTimer = hs.timer.doEvery(BLUETOOTH_POLL_INTERVAL, refreshLayer5Menu)
+
+-- スリープ復帰直後は接続状態が変わりやすいので、ポーリングを待たずに再判定する
+caffeinateWatcher = hs.caffeinate.watcher.new(function(event)
+   if event == hs.caffeinate.watcher.systemDidWake
+      or event == hs.caffeinate.watcher.screensDidUnlock then
+      refreshLayer5Menu()
+   end
+end)
+caffeinateWatcher:start()
 
 -- コマンド
 remapKey({'ctrl'}, '[', keyCode('escape'))
