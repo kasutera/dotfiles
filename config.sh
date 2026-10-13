@@ -75,6 +75,7 @@ for filename in \
     .config/ghostty/config \
     .config/ghostty/ssh-colors.zsh \
     .config/git/config \
+    .config/git/sync.sh \
     .claude/keybindings.json \
     .claude/statusline-command.sh \
     .p10k.zsh \

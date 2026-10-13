@@ -18,6 +18,7 @@
 [alias]
 	web = !git-remote-web
 	com = commit -v
+	sync = !\"$HOME/.config/git/sync.sh\"
 #[interactive]
 #	diffFilter = delta --color-only
 #[delta]
