@@ -19,6 +19,60 @@ install_herdr_integrations() {
     herdr integration install claude
 }
 
+# shellcheck disable=SC2329
+ensure_herdr_pane_id_labeler() {
+    local plugin_id="io.github.4born.pane-id-labeler"
+    local plugin_repo="4Born/herdr-pane-id-labeler"
+    local plugin_ref="176adbfa6adcfbb03d5aba400a06aea395d9bb31"
+    local plugin_list plugin_state
+    # Keep jq's $plugin_id unexpanded by the shell.
+    # shellcheck disable=SC2016
+    local plugin_state_filter='
+        if (.result.plugins | type) != "array" then error("missing plugins array")
+        else
+            ([.result.plugins[] | select(.plugin_id == $plugin_id)] | .[0]) as $plugin
+            | if $plugin == null then "missing"
+              elif $plugin.enabled == true then "enabled"
+              else "disabled"
+              end
+        end
+    '
+
+    type jq >/dev/null 2>&1 ||
+        herdr_config_error "jq is required to manage Herdr plugins"
+
+    if ! plugin_list="$(herdr plugin list --plugin "${plugin_id}" --json)"; then
+        herdr_config_error "Could not query Herdr plugins; ensure the Herdr server is running"
+    fi
+    if ! plugin_state="$(jq -er --arg plugin_id "${plugin_id}" "${plugin_state_filter}" <<<"${plugin_list}")"; then
+        herdr_config_error "Could not parse Herdr plugin list"
+    fi
+
+    # Reinstalling a managed plugin replaces its checkout, so install only if missing.
+    if [[ "${plugin_state}" == "missing" ]]; then
+        herdr plugin install "${plugin_repo}" --ref "${plugin_ref}" --yes ||
+            herdr_config_error "Could not install ${plugin_id}"
+        if ! plugin_list="$(herdr plugin list --plugin "${plugin_id}" --json)"; then
+            herdr_config_error "Could not confirm installation of ${plugin_id}"
+        fi
+        if ! plugin_state="$(jq -er --arg plugin_id "${plugin_id}" "${plugin_state_filter}" <<<"${plugin_list}")"; then
+            herdr_config_error "Could not parse Herdr plugin list"
+        fi
+    fi
+
+    case "${plugin_state}" in
+    enabled)
+        ;;
+    disabled)
+        herdr plugin enable "${plugin_id}" ||
+            herdr_config_error "Could not enable ${plugin_id}"
+        ;;
+    missing)
+        herdr_config_error "${plugin_id} is missing after installation"
+        ;;
+    esac
+}
+
 # config.toml だけは symlink にできない。allow_nested はホスト種別で値が
 # 変わるので、repo の共通設定に [experimental] を継ぎ足した実体ファイルを
 # 生成する。共通設定を編集したら ./config.sh を流し直すこと。

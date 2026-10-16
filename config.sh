@@ -91,6 +91,7 @@ install_skills
 # 続行する。
 if type herdr >/dev/null 2>&1; then
     install_herdr_integrations
+    ensure_herdr_pane_id_labeler
     HERDR_AVAILABLE=1
 else
     echo "WARNING: herdr not found; skipped Herdr integration/configuration" >&2
