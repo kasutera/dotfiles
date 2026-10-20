@@ -272,6 +272,9 @@ colors
 # less display prompt (-M), ANSI escape sequence (-R), not to pagenate if less than a page (-F), keep output (-X)
 export LESS='-M -R -F -X'
 
+# claude code が zsh の単語分割に引っかかりまくるので対策
+[[ -n $CLAUDECODE ]] && setopt SH_WORD_SPLIT
+
 # bat theme
 if type batcat >> /dev/null; then
     alias bat=batcat
