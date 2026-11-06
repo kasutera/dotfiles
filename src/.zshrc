@@ -182,23 +182,25 @@ add-zsh-hook precmd _terminal_notifier_precmd
 # ############################################################# #
 # alias                                                         #
 # ############################################################# #
-alias cp='cp -i'
-alias mv='mv -i'
-alias ls='ls -aGF'
-alias cppwd='pwd | pbcopy'
-alias cdcp='cd $(pbpaste)'
-alias history-all='history -E 1'
-alias hist-grep='history-all | grep'
-alias emacs='vim'
-alias v='vim'
-alias vi='vim'
-type nvim >> /dev/null && alias vim='nvim'
-type gdate >> /dev/null && alias date='gdate'
-alias pbtee='tee >(pbcopy)'
-alias tig='tig --all'
-alias :q='exit'
+if [[ -o interactive ]]; then
+    alias cp='cp -i'
+    alias mv='mv -i'
+    alias ls='ls -aGF'
+    alias cppwd='pwd | pbcopy'
+    alias cdcp='cd $(pbpaste)'
+    alias history-all='history -E 1'
+    alias hist-grep='history-all | grep'
+    alias emacs='vim'
+    alias v='vim'
+    alias vi='vim'
+    type nvim >> /dev/null && alias vim='nvim'
+    type gdate >> /dev/null && alias date='gdate'
+    alias pbtee='tee >(pbcopy)'
+    alias tig='tig --all'
+    alias :q='exit'
 
-alias -s {png,jpg,bmp,tif,tiff,PNG,JPG,BMP,TIF,TIFF}=open
+    alias -s {png,jpg,bmp,tif,tiff,PNG,JPG,BMP,TIF,TIFF}=open
+fi
 
 # ############################################################# #
 # zmv                                                           #
