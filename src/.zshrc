@@ -277,6 +277,27 @@ export LESS='-M -R -F -X'
 # claude code が zsh の単語分割に引っかかりまくるので対策
 [[ -n $CLAUDECODE ]] && setopt SH_WORD_SPLIT
 
+# Herdr のペインごとの環境変数を Codex のツールやフックに引き継ぐ。
+function codex() {
+    if [[ ${HERDR_ENV:-} != 1 || ${1:-} == agents ]]; then
+        command codex "$@"
+        return
+    fi
+
+    local arg
+    for arg in "$@"; do
+        case $arg in
+            --no-daemon|--remote|--remote=*)
+                command codex "$@"
+                return
+                ;;
+            --) break ;;
+        esac
+    done
+
+    command codex --no-daemon "$@"
+}
+
 # bat theme
 if type batcat >> /dev/null; then
     alias bat=batcat
